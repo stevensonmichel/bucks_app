@@ -1,4 +1,4 @@
-# *Replace with YourProposedProposedProjectName*
+# *BUCK$*
 ## Description/Motivation
 
 Your formally written project proposal description, and why it is useful/interesting/fun goes here. Try to be as descriptive as possible, as we will be discussing your project ideas during the brainstorming in class.
@@ -9,13 +9,19 @@ What is likely to be needed to install and to run *YourProposedProjectName* go h
 
 ## Built With
 
-- [afreamework1](http://www.aframework1.io/): A framework that is likly to be used goes here.
+Frontend 
+- Language: TypeScript
+- [afreamework1](http://www.aframework1.io/): React
+- [afreamework2](http://www.aframework2.io/): A second framework that is likly to be used goes here.
+Backend 
+- Language: Python
+- [afreamework1](http://www.aframework1.io/): Django
 - [afreamework2](http://www.aframework2.io/): A second framework that is likly to be used goes here.
 - IDE, if applicable
 
 ## Author
 
-- **Your name**: *YourProposadProjectName* [yourLinkedIn or yourGithub profile](https://adrress)
+- **Stevenson Michel**: *BUCK$* [yourLinkedIn or yourGithub profile](https://github.com/stevensonmichel)
 
 ## Acknowledgments
 
