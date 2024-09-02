@@ -15,6 +15,7 @@ BUCK$ aims at revolutionizing the financial industry by providing secure and rel
 Frontend 
 - Language: TypeScript
 - [React](https://github.com/facebook/react): React
+
 Backend 
 - Language: Python
 - [Django](https://github.com/django/django): Django
