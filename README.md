@@ -1,22 +1,23 @@
 # *BUCK$*
 ## Description/Motivation
 
-Your formally written project proposal description, and why it is useful/interesting/fun goes here. Try to be as descriptive as possible, as we will be discussing your project ideas during the brainstorming in class.
+BUCK$ aims at revolutionizing the financial industry by providing secure and reliable ways to track your expenses as a user. With the overwhelming mental cost of budgeting, BUCK$ simplified that task, autorecording your expenses and gains based on your preferences for capturing spending and earning events. 
 
 ### Prerequisites
 
-What is likely to be needed to install and to run *YourProposedProjectName* go here. If nothing is required (i.e. it is a website), state so.
+- Python 3
+- Django
+- React
+- TypeScript
 
 ## Built With
 
 Frontend 
 - Language: TypeScript
-- [afreamework1](http://www.aframework1.io/): React
-- [afreamework2](http://www.aframework2.io/): A second framework that is likly to be used goes here.
+- [React](https://github.com/facebook/react): React
 Backend 
 - Language: Python
-- [afreamework1](http://www.aframework1.io/): Django
-- [afreamework2](http://www.aframework2.io/): A second framework that is likly to be used goes here.
+- [Django](https://github.com/django/django): Django
 - IDE, if applicable
 
 ## Author
