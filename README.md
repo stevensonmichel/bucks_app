@@ -2,6 +2,7 @@
 
 
 **Project Concept (linked to <code>concept.md</code>)**
+[Project concept](concept.md)
 
 ## Description/Motivation
 
@@ -27,7 +28,7 @@ Backend
 
 ## Author
 
-- **Stevenson Michel**: *BUCK$* [yourLinkedIn or yourGithub profile](https://github.com/stevensonmichel)
+- **Stevenson Michel**: *BUCK$* [Stevenson Michel](https://github.com/stevensonmichel)
 
 ## Acknowledgments
 
