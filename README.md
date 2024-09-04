@@ -1,4 +1,8 @@
 # *BUCK$*
+
+
+**Project Concept (linked to <code>concept.md</code>)**
+
 ## Description/Motivation
 
 BUCK$ aims at revolutionizing the financial industry by providing secure and reliable ways to track your expenses as a user. With the overwhelming mental cost of budgeting, BUCK$ simplified that task, autorecording your expenses and gains based on your preferences for capturing spending and earning events. 
