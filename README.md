@@ -1,7 +1,7 @@
 # *BUCK$*
 
 
-**Project Concept (linked to <code>concept.md</code>)**
+### Project Concept
 [Project concept](concept.md)
 
 ## Description/Motivation
