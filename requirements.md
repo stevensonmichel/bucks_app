@@ -1,151 +1,135 @@
 
 
 ### Requirement 1: User Registration and Authentication
-Number: R1
+- Number: R1
 
-Statement: The system shall allow users to register, log in, and log out securely.
+- Statement: The system shall allow users to register, log in, and log out securely.
 
-Evaluation Method: Verify that users can create an account, log in with valid credentials, and securely log out. Test for unauthorized access after logout.
+- Evaluation Method: Verify that users can create an account, log in with valid credentials, and securely log out. Test for unauthorized access after logout.
 
-Dependency: None
+- Dependency: None
 
-Priority: Essential
+- Priority: Essential
 
-Requirement Revision History: 9/4/2024: Initial creation of user authentication requirement.
-
+- Requirement Revision History: 9/4/2024: Initial creation of user authentication requirement.
 
 
 
 ### Requirement 2: Track Expenses
-Number: R2
+- Number: R2
 
-Statement: The system shall allow users to input and categorize expenses with descriptions and amounts.
+- Statement: The system shall allow users to input and categorize expenses with descriptions and amounts.
 
-Evaluation Method: Ensure users can successfully add expense entries with required details such as amount, category, and description. Check for data validation (e.g., negative values).
+- Evaluation Method: Ensure users can successfully add expense entries with required details such as amount, category, and description. Check for data validation (e.g., negative values).
 
-Dependency: R1 (User Authentication)
+- Dependency: R1 (User Authentication)
 
-Priority: Essential
+- Priority: Essential
 
-Requirement Revision History: 9/4/2024: Created based on core functionality of tracking expenses.
-
-
+- Requirement Revision History: 9/4/2024: Created based on core functionality of tracking expenses.
 
 
 ### Requirement 3: Expense Categories
-Number: R3
+- Number: R3
 
-Statement: The system shall provide predefined categories (e.g., groceries, utilities) and allow users to add custom categories.
+- Statement: The system shall provide predefined categories (e.g., groceries, utilities) and allow users to add custom categories.
 
-Evaluation Method: Verify that users can select predefined categories and create custom categories. Ensure expenses are assigned to categories.
+- Evaluation Method: Verify that users can select predefined categories and create custom categories. Ensure expenses are assigned to categories.
 
-Dependency: R2 (Track Expenses)
+- Dependency: R2 (Track Expenses)
 
-Priority: High
+- Priority: High
 
-Requirement Revision History: 9/4/2024: Added requirement for custom expense categorization.
-
-
+- Requirement Revision History: 9/4/2024: Added requirement for custom expense categorization.
 
 
 ### Requirement 4: Display Expense History
-Number: R4
+- Number: R4
 
-Statement: The system shall display a list of past expenses with filters for date range, category, and amount.
+- Statement: The system shall display a list of past expenses with filters for date range, category, and amount.
 
-Evaluation Method: Verify that users can view a list of past expenses and apply filters. Ensure filtered results match criteria.
+- Evaluation Method: Verify that users can view a list of past expenses and apply filters. Ensure filtered results match criteria.
 
-Dependency: R2 (Track Expenses), R3 (Expense Categories)
+- Dependency: R2 (Track Expenses), R3 (Expense Categories)
 
-Priority: High
+- Priority: High
 
-Requirement Revision History: 9/4/2024: Created based on the need for users to analyze past expenses.
-
+- Requirement Revision History: 9/4/2024: Created based on the need for users to analyze past expenses.
 
 
 
 ### Requirement 5: Monthly Budget Setting
-Number: R5
+- Number: R5
 
-Statement: The system shall allow users to set a monthly budget and notify them when they are close to exceeding it.
+- Statement: The system shall allow users to set a monthly budget and notify them when they are close to exceeding it.
 
-Evaluation Method: Test if users can set a budget and receive notifications or alerts when their expenses approach or exceed the set limit.
+- Evaluation Method: Test if users can set a budget and receive notifications or alerts when their expenses approach or exceed the set limit.
 
-Dependency: R2 (Track Expenses)
+- Dependency: R2 (Track Expenses)
 
-Priority: Middle
+- Priority: Middle
 
-Requirement Revision History: 9/4/2024: Created based on user feedback to track budget compliance.
-
+- Requirement Revision History: 9/4/2024: Created based on user feedback to track budget compliance.
 
 
 
 ### Requirement 6: Data Export
-Number: R6
+- Number: R6
 
-Statement: The system shall allow users to export their expense data in CSV format.
+- Statement: The system shall allow users to export their expense data in CSV format.
 
-Evaluation Method: Ensure users can download a CSV file that contains their expense data, and verify the file's accuracy.
+- Evaluation Method: Ensure users can download a CSV file that contains their expense data, and verify the file's accuracy.
 
-Dependency: R2 (Track Expenses), R4 (Display Expense History)
+- Dependency: R2 (Track Expenses), R4 (Display Expense History)
 
-Priority: If time permits
+- Priority: If time permits
 
-Requirement Revision History: 9/4/2024: Created as an additional feature to provide more flexibility in data handling.
-
+- Requirement Revision History: 9/4/2024: Created as an additional feature to provide more flexibility in data handling.
 
 
 
 ### Requirement 7: Mobile Responsiveness
-Number: R7
+- Number: R7
 
-Statement: The system shall be responsive and usable on both desktop and mobile devices.
+- Statement: The system shall be responsive and usable on both desktop and mobile devices.
 
-Evaluation Method: Test the UI on different screen sizes (desktop, tablet, mobile) to ensure proper rendering and usability.
+- Evaluation Method: Test the UI on different screen sizes (desktop, tablet, mobile) to ensure proper rendering and usability.
 
-Dependency: None
+- Dependency: None
 
-Priority: High
+- Priority: High
 
-Requirement Revision History: 9/4/2024: Added based on the requirement for cross-platform usage.
-
-
+- Requirement Revision History: 9/4/2024: Added based on the requirement for cross-platform usage.
 
 
 
 ### Requirement 8: Secure Password Storage
-Number: R8
+- Number: R8
 
-Statement: The system shall securely store user passwords using encryption methods.
+- Statement: The system shall securely store user passwords using encryption methods.
 
-Evaluation Method: Ensure passwords are hashed and cannot be retrieved in plaintext from the database. Verify compliance with security best practices (e.g., bcrypt).
+- Evaluation Method: Ensure passwords are hashed and cannot be retrieved in plaintext from the database. Verify compliance with security best practices (e.g., bcrypt).
 
-Dependency: R1 (User Authentication)
+- Dependency: R1 (User Authentication)
 
-Priority: Essential
+- Priority: Essential
 
-Requirement Revision History: 9/4/2024: Added based on security requirements for user data protection.
-
+- Requirement Revision History: 9/4/2024: Added based on security requirements for user data protection.
 
 
 
 ### Requirement 9: User Profile Management
-Number: R9
+- Number: R9
 
-Statement: The system shall allow users to manage their profile information (e.g., email, name, password).
+- Statement: The system shall allow users to manage their profile information (e.g., email, name, password).
 
-Evaluation Method: Verify that users can update their personal information and that changes are reflected in the system.
+- Evaluation Method: Verify that users can update their personal information and that changes are reflected in the system.
 
-Dependency: R1 (User Authentication)
+- Dependency: R1 (User Authentication)
 
-Priority: Middle
+- Priority: Middle
 
-Requirement Revision History: 9/4/2024: Added to provide profile customization functionality.
-
-
-
-
-
+- Requirement Revision History: 9/4/2024: Added to provide profile customization functionality.
 
 
 
