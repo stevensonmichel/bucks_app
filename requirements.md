@@ -14,6 +14,8 @@ Priority: Essential
 Requirement Revision History: 9/4/2024: Initial creation of user authentication requirement.
 
 
+
+
 ### Requirement 2: Track Expenses
 Number: R2
 
@@ -26,6 +28,7 @@ Dependency: R1 (User Authentication)
 Priority: Essential
 
 Requirement Revision History: 9/4/2024: Created based on core functionality of tracking expenses.
+
 
 
 
@@ -43,6 +46,8 @@ Priority: High
 Requirement Revision History: 9/4/2024: Added requirement for custom expense categorization.
 
 
+
+
 ### Requirement 4: Display Expense History
 Number: R4
 
@@ -55,6 +60,8 @@ Dependency: R2 (Track Expenses), R3 (Expense Categories)
 Priority: High
 
 Requirement Revision History: 9/4/2024: Created based on the need for users to analyze past expenses.
+
+
 
 
 ### Requirement 5: Monthly Budget Setting
@@ -71,6 +78,8 @@ Priority: Middle
 Requirement Revision History: 9/4/2024: Created based on user feedback to track budget compliance.
 
 
+
+
 ### Requirement 6: Data Export
 Number: R6
 
@@ -83,6 +92,8 @@ Dependency: R2 (Track Expenses), R4 (Display Expense History)
 Priority: If time permits
 
 Requirement Revision History: 9/4/2024: Created as an additional feature to provide more flexibility in data handling.
+
+
 
 
 ### Requirement 7: Mobile Responsiveness
@@ -99,6 +110,9 @@ Priority: High
 Requirement Revision History: 9/4/2024: Added based on the requirement for cross-platform usage.
 
 
+
+
+
 ### Requirement 8: Secure Password Storage
 Number: R8
 
@@ -113,6 +127,8 @@ Priority: Essential
 Requirement Revision History: 9/4/2024: Added based on security requirements for user data protection.
 
 
+
+
 ### Requirement 9: User Profile Management
 Number: R9
 
@@ -125,6 +141,9 @@ Dependency: R1 (User Authentication)
 Priority: Middle
 
 Requirement Revision History: 9/4/2024: Added to provide profile customization functionality.
+
+
+
 
 
 ### Requirement 10: Dashboard with Analytics
