@@ -134,14 +134,14 @@
 
 
 ### Requirement 10: Dashboard with Analytics
-Number: R10
+- Number: R10
 
-Statement: The system shall provide a dashboard showing analytics, such as total monthly expenses, spending by category, and budget status.
+- Statement: The system shall provide a dashboard showing analytics, such as total monthly expenses, spending by category, and budget status.
 
-Evaluation Method: Ensure the dashboard shows real-time analytics based on user data. Verify correctness of charts, graphs, and figures.
+- Evaluation Method: Ensure the dashboard shows real-time analytics based on user data. Verify correctness of charts, graphs, and figures.
 
-Dependency: R2 (Track Expenses), R3 (Expense Categories), R5 (Monthly Budget)
+- Dependency: R2 (Track Expenses), R3 (Expense Categories), R5 (Monthly Budget)
 
-Priority: High
+- Priority: High
 
-Requirement Revision History: 9/4/2024: Added for enhanced user insights into their financial data.
+- Requirement Revision History: 9/4/2024: Added for enhanced user insights into their financial data.
