@@ -25,6 +25,11 @@ BUCK$ aims at revolutionizing the financial industry by providing secure and rel
 - React
 - TypeScript
 
+
+### Requirements
+[Project Requirements](requirements.md)
+
+
 ## Built With
 
 Frontend 

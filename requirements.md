@@ -3,7 +3,7 @@
 ### Requirement 1: User Registration and Authentication
 - Number: R1
 
-- Statement: The system shall allow users to register, log in, and log out securely.
+- Statement: The system should allow users to register, log in, and log out securely.
 
 - Evaluation Method: Verify that users can create an account, log in with valid credentials, and securely log out. Test for unauthorized access after logout.
 
@@ -11,14 +11,14 @@
 
 - Priority: Essential
 
-- Requirement Revision History: 9/4/2024: Initial creation of user authentication requirement.
+- Requirement Revision History: 9/8/2024: Initial creation of user authentication requirement.
 
 
 
 ### Requirement 2: Track Expenses
 - Number: R2
 
-- Statement: The system shall allow users to input and categorize expenses with descriptions and amounts.
+- Statement: The system should allow users to categorize expenses with descriptions and amounts.
 
 - Evaluation Method: Ensure users can successfully add expense entries with required details such as amount, category, and description. Check for data validation (e.g., negative values).
 
@@ -26,7 +26,7 @@
 
 - Priority: Essential
 
-- Requirement Revision History: 9/4/2024: Created based on core functionality of tracking expenses.
+- Requirement Revision History: 9/8/2024: Created based on core functionality of tracking expenses.
 
 
 ### Requirement 3: Expense Categories
@@ -40,7 +40,7 @@
 
 - Priority: High
 
-- Requirement Revision History: 9/4/2024: Added requirement for custom expense categorization.
+- Requirement Revision History: 9/8/2024: Added requirement for custom expense categorization.
 
 
 ### Requirement 4: Display Expense History
@@ -73,38 +73,8 @@
 
 
 
-### Requirement 6: Data Export
+### Requirement 6: Secure Password Storage
 - Number: R6
-
-- Statement: The system shall allow users to export their expense data in CSV format.
-
-- Evaluation Method: Ensure users can download a CSV file that contains their expense data, and verify the file's accuracy.
-
-- Dependency: R2 (Track Expenses), R4 (Display Expense History)
-
-- Priority: If time permits
-
-- Requirement Revision History: 9/4/2024: Created as an additional feature to provide more flexibility in data handling.
-
-
-
-### Requirement 7: Mobile Responsiveness
-- Number: R7
-
-- Statement: The system shall be responsive and usable on both desktop and mobile devices.
-
-- Evaluation Method: Test the UI on different screen sizes (desktop, tablet, mobile) to ensure proper rendering and usability.
-
-- Dependency: None
-
-- Priority: High
-
-- Requirement Revision History: 9/4/2024: Added based on the requirement for cross-platform usage.
-
-
-
-### Requirement 8: Secure Password Storage
-- Number: R8
 
 - Statement: The system shall securely store user passwords using encryption methods.
 
@@ -114,12 +84,12 @@
 
 - Priority: Essential
 
-- Requirement Revision History: 9/4/2024: Added based on security requirements for user data protection.
+- Requirement Revision History: 9/8/2024: Added based on security requirements for user data protection.
 
 
 
-### Requirement 9: User Profile Management
-- Number: R9
+### Requirement 7: User Profile Management
+- Number: R7
 
 - Statement: The system shall allow users to manage their profile information (e.g., email, name, password).
 
@@ -129,19 +99,7 @@
 
 - Priority: Middle
 
-- Requirement Revision History: 9/4/2024: Added to provide profile customization functionality.
+- Requirement Revision History: 9/8/2024: Added to provide profile customization functionality.
 
 
 
-### Requirement 10: Dashboard with Analytics
-- Number: R10
-
-- Statement: The system shall provide a dashboard showing analytics, such as total monthly expenses, spending by category, and budget status.
-
-- Evaluation Method: Ensure the dashboard shows real-time analytics based on user data. Verify correctness of charts, graphs, and figures.
-
-- Dependency: R2 (Track Expenses), R3 (Expense Categories), R5 (Monthly Budget)
-
-- Priority: High
-
-- Requirement Revision History: 9/4/2024: Added for enhanced user insights into their financial data.
