@@ -53,7 +53,7 @@ Backend
 
 ## Author
 
-- **Stevenson Michel**: *BUCK$* [Stevenson Michel](https://github.com/stevensonmichel)
+- [Stevenson Michel](https://www.linkedin.com/in/stevenson-michel/)
 
 <br><br>
 
