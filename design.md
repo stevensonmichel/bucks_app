@@ -42,6 +42,7 @@ Tables:
 - Budgets Table: Stores user-defined budget limits and associated spending.
 - Categories Table: Contains predefined and user-generated categories for organizing expenses.
 
+<br><br>
 
 ## 3. Control Flow and Data Flow
 
@@ -65,6 +66,7 @@ Tables:
 - Data Flow: UI → Analytics API → Database → UI (visualization)
 
 
+<br><br>
 
 ## 4. Hierarchical Component Structure
 
@@ -89,7 +91,7 @@ Tables:
 - Categories Table
 
 
-
+<br><br>
 
 ## 5. Interactions and Dependencies
 The UI interacts with the backend via REST API calls, exchanging data between components.
@@ -97,14 +99,14 @@ The backend relies on PostgreSQL to store and retrieve user data, expenses, budg
 Dependencies exist between the Expense Processing Module and Analytics Module, as analytics rely on real-time expense data.
 
 
-
+<br><br>
 
 ## 6. Priority Considerations
 The authentication system is critical for securing user data.
 Expense tracking and budget management are essential features and will be prioritized for the MVP (Minimum Viable Product).
 Analytics and data export are high-priority features, but can be added after core functionalities are completed.
 
-
+<br><br>
 
 ## 7. Revisions
 9/4/2024: Initial design created, outlining key components and control flow for MVP development.
