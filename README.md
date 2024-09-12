@@ -3,7 +3,7 @@
 
 ### Project Concept
 [Project concept](concept.md)
-
+<br><br>
 
 ### Vision and Scope
 
@@ -13,6 +13,7 @@ The BUCK$ expense tracker will focus on core functionalities that enable users t
 #### Vision:
 The vision for BUCK$ is to empower individuals to take control of their personal finances through a simple, intuitive, and reliable expense tracking tool. By the time the project is completed, BUCK$ will offer users a seamless experience in managing their money, helping them build better financial habits and make informed decisions. The world after BUCK$ is one where users are more financially aware and equipped with the tools they need to stay on budget, save money, and achieve their financial goals, all through a hassle-free platform that supports them without requiring extensive financial expertise.
 
+<br><br>
 
 ## Description/Motivation
 
@@ -25,17 +26,17 @@ BUCK$ aims at revolutionizing the financial industry by providing secure and rel
 - React
 - TypeScript
 
+<br><br>
 
 ### Requirements
 [Project Requirements](requirements.md)
 
+<br><br>
 
-
-
-### Requirements
+### Design
 [Project Design](design.md)
 
-
+<br><br>
 
 ## Built With
 
@@ -48,15 +49,21 @@ Backend
 - Framework: [Django](https://github.com/django/django): Django
 - IDE, if applicable
 
+<br><br>
+
 ## Author
 
 - **Stevenson Michel**: *BUCK$* [Stevenson Michel](https://github.com/stevensonmichel)
+
+<br><br>
 
 ## Acknowledgments
 
 - If you find code that you are going to use in YourProjectName, include author's name and URL here.
 - all who inspired the idea and/or the code in YourProjectName
 - other people you wish to acknowledge
+
+<br><br>
 
 ## License (not required initially)
 
