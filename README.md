@@ -30,6 +30,13 @@ BUCK$ aims at revolutionizing the financial industry by providing secure and rel
 [Project Requirements](requirements.md)
 
 
+
+
+### Requirements
+[Project Design](design.md)
+
+
+
 ## Built With
 
 Frontend 
