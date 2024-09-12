@@ -1,7 +1,6 @@
 ## 1. Overview
 The Buck$ Expense Tracker application is designed to help users manage their finances by tracking expenses, setting budgets, and providing insights into spending habits. The system will provide user authentication, data storage, analytics, and a user-friendly interface. This design document provides a high-level view of the system architecture, outlining the major components, control flow, and interactions within the system.  
-  
-  
+<br><br>
 
 
 ## 2. System Components
