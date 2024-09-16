@@ -27,7 +27,6 @@ Major Components:
 - Authentication Module: Manages user sessions and token-based authentication.
 - Expense Processing Module: Handles expense creation, modification, and categorization.
 - Budget Processing Module: Manages user budget data and triggers notifications when limits are exceeded.
-- Analytics Module: Provides users with financial insights, including expense breakdowns by category and time period.
 
 
 
@@ -61,9 +60,6 @@ Tables:
 - Data Flow: UI → Budget API → Database (Budgets Table)
 
 
-### 3.4 Analytics Flow
-- Control Flow: Users request spending insights via the dashboard. The analytics module fetches expense data from the database, processes it, and returns visualized data (graphs, charts) to the frontend.
-- Data Flow: UI → Analytics API → Database → UI (visualization)
 
 
 <br><br>
@@ -81,7 +77,6 @@ Tables:
 - Authentication Module
 - Expense Processing Module
 - Budget Processing Module
-- Analytics Module
 
 
 ### Database (PostgreSQL):
@@ -104,7 +99,7 @@ Dependencies exist between the Expense Processing Module and Analytics Module, a
 ## 6. Priority Considerations
 The authentication system is critical for securing user data.
 Expense tracking and budget management are essential features and will be prioritized for the MVP (Minimum Viable Product).
-Analytics and data export are high-priority features, but can be added after core functionalities are completed.
+Analytics and data export are not high-priority features, but can be added after core functionalities are completed.
 
 <br><br>
 
