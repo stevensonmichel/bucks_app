@@ -1,5 +1,8 @@
 # *BUCK$*
 
+# Project Logo
+[Project Logo](project_logo.png)
+jj
 
 ### Project Concept
 [Project concept](concept.md)
