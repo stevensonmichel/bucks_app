@@ -2,7 +2,7 @@
 
 # Project Logo
 [Project Logo](project_logo.png)
-jj
+
 
 ### Project Concept
 [Project concept](concept.md)
@@ -57,6 +57,19 @@ Backend
 ## Author
 
 - [Stevenson Michel](https://www.linkedin.com/in/stevenson-michel/)
+
+About the Lead Developer
+
+Stevenson Michel is a current senior at Berea College, double majoring in Computer Science and Mathematics. As a dedicated software developer, he has a passion for building practical and user-friendly applications that solve real-world problems. With experience in full-stack development, Stevenson has developed a strong skill set that focuses on creating solutions with clean design and efficient functionality.
+
+One of his notable projects, BUCK$, an expense tracker application, reflects his commitment to helping individuals manage their finances with ease. Stevenson believes in the importance of personal finance management and has designed the app to be simple, intuitive, and accessible to a wide range of users.
+
+As a former intern at Berea College Student Software Developer Team and at Red Hat, Inc, Stevenson has worked with various programming languages and frameworks from backend to frontend, always striving to improve his skills and stay updated with the latest technological trends. He is a firm believer that the best applications are those that not only perform well but also provide a seamless and enjoyable user experience.
+
+When he’s not coding, Stevenson enjoys exploring new tech innovations, reading self help and fantasy books, playing basketball, as well as spending time in nature. He is always eager to connect with other developers to brainstorm ideas and engage in meaningful discussions regarding the tech landscape.
+
+Stevenson hopes that BUCK$ will make a positive impact on users, helping them manage their finances more effectively.
+
 
 <br><br>
 
