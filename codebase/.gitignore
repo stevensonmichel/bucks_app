@@ -1,0 +1,66 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+frontend/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# Python-related
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+.eggs/
+
+# Virtual environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django-related
+db.sqlite3
+*.sqlite3
+/media
+/staticfiles
+*.log
+*.pot
+
+# Environment variables
+.env
+
+# Migrations (if ignoring during early development)
+# **/migrations/
+
+# IDEs
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Node modules (if frontend dependencies are managed here)
+node_modules/

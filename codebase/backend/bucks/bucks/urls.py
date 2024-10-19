@@ -14,9 +14,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path
+from django.http import JsonResponse
+from django.urls import path, include
+
+def home_view(request):
+    return JsonResponse({'message': 'Welcome to the backend!'})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/buckets/', include('buckets.urls')),
+    # # path('api/login/', include('login.urls')),
+    # path('api/signup/', include('signup.urls')),
+    path('', home_view),
+    path('api/plaid/', include('plaid_integration.urls')), 
 ]
