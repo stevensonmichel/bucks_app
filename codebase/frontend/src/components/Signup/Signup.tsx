@@ -6,7 +6,7 @@ interface SignUpFormData {
   username: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  password2: string;
 }
 
 const SignUp: React.FC = () => {
@@ -16,7 +16,7 @@ const SignUp: React.FC = () => {
     username: '',
     email: '',
     password: '',
-    confirmPassword: '',
+    password2: '',
   });
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -37,13 +37,13 @@ const SignUp: React.FC = () => {
     setSuccessMessage(null);
 
     // Check if passwords match
-    if (formData.password !== formData.confirmPassword) {
+    if (formData.password !== formData.password2) {
       setErrorMessage('Passwords do not match.');
       return;
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/signup/', {
+      const response = await fetch('http://127.0.0.1:8000/api/users/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const SignUp: React.FC = () => {
           username: formData.username,
           email: formData.email,
           password: formData.password,
-          password2: formData.confirmPassword,
+          password2: formData.password2,
         }),
       });
 
@@ -131,11 +131,11 @@ const SignUp: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="confirmPassword" className="block text-gray-700">Confirm Password</label>
+          <label htmlFor="password" className="block text-gray-700">Confirm Password</label>
           <input
             type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
+            name="password2"
+            value={formData.password2}
             onChange={handleChange}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required

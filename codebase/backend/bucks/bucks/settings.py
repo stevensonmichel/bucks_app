@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'expenses',
     'authentication',
     'plaid_integration',
+    'users',
     'corsheaders',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -58,6 +60,9 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
     ),
 }
 
@@ -149,6 +154,15 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+
+# Allow localhost:3000 as a trusted origin (for local development)
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+]
+
+# Ensure that localhost is also allowed in ALLOWED_HOSTS for development
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

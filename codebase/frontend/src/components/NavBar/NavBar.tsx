@@ -1,6 +1,5 @@
 import React from "react";
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom'
 // const NavBar: React.FC = () => {
 //     return (
 //             <div className="w-80 bg-blue-500 text-white flex flex-col p-4 space-y-14">
@@ -41,28 +40,30 @@ import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
 // export default NavBar;
 
+
+
 const NavBar: React.FC = () => {
   return (
-    <nav className="bg-cyan-400 text-white w-100 p-8 space-y-10">
+    <nav className="bg-cyan-400 text-white w-1/5 h-screen p-8 space-y-10"> {/* Updated height to 100vh (h-screen) */}
       <div className="flex items-center space-x-4">
         <span role="img" aria-label="overview" className="text-3xl">📣</span>
-        <a href="/overview" className="text-3xl font-semibold">Overview</a>
+        <Link to="/overview" className="text-3xl font-semibold">Overview</Link>
       </div>
       <div className="flex items-center space-x-4">
         <span role="img" aria-label="buckets" className="text-3xl">📞</span>
-        <a href="/buckets" className="text-3xl font-semibold">Buckets</a>
+        <Link to="/buckets" className="text-3xl font-semibold">Buckets</Link>
       </div>
       <div className="flex items-center space-x-4">
         <span role="img" aria-label="expenses" className="text-3xl">👥</span>
-        <a href="/expenses" className="text-3xl font-semibold">Expenses</a>
+        <Link to="/expenses" className="text-3xl font-semibold">Expenses</Link>
       </div>
       <div className="flex items-center space-x-4">
         <span role="img" aria-label="accounts" className="text-3xl">📖</span>
-        <a href="/accounts" className="text-3xl font-semibold">Accounts</a>
+        <Link to="/accounts" className="text-3xl font-semibold">Accounts</Link>
       </div>
       <div className="flex items-center space-x-4">
         <span role="img" aria-label="overview" className="text-3xl">📧</span>
-        <a href="/overview" className="text-3xl font-semibold">Overview</a>
+        <Link to="/notifications" className="text-3xl font-semibold">Notifications</Link>
       </div>
     </nav>
   );

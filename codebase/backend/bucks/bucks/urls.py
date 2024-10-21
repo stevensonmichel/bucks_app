@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/buckets/', include('buckets.urls')),
     # # path('api/login/', include('login.urls')),
     # path('api/signup/', include('signup.urls')),
+    path('api/users/', include('users.urls')),
     path('', home_view),
     path('api/plaid/', include('plaid_integration.urls')), 
 ]

@@ -10,13 +10,15 @@ import Expenses from './components/Expenses/Expenses';
 import Login from './components/Login/Login';
 import SignUp from './components/Signup/Signup'; 
 import Contact from './components/Contact/Contact';
+import Notifications from './components/Notifications/Notifications';
 import axios from 'axios'; 
+import TransactionsPage from './components/TransactionsPage/TransactionsPage';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     if (token) {
       setIsAuthenticated(true);
     }
@@ -27,7 +29,7 @@ const App: React.FC = () => {
   const handleLogin = async (username: string, password: string) => {
     try {
       // Make a POST request to the Django backend to authenticate the user
-      const response = await axios.post('http://127.0.0.1:8000/api/login/token/', {
+      const response = await axios.post('http://127.0.0.1:8000/api/users/token/', {
         username,
         password,
       });
@@ -35,6 +37,8 @@ const App: React.FC = () => {
       // If successful, store the token in localStorage and set isAuthenticated to true
       localStorage.setItem('access_token', response.data.access); // Store the access token
       localStorage.setItem('refresh_token', response.data.refresh);
+
+      console.log("LOOOOOOOOOOOOOOOOOGGGGGG access token is", response.data.access)
 
       console.log('Login successful, tokens stored');
       setIsAuthenticated(true);
@@ -46,7 +50,8 @@ const App: React.FC = () => {
 
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     setIsAuthenticated(false);
   };
 
@@ -59,9 +64,9 @@ const App: React.FC = () => {
           {!isAuthenticated && (
             <>
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
-              <Route path="*" element={<Navigate to="/login" />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<Navigate to="/login" />} />
             </>
           )}
 
@@ -81,11 +86,12 @@ const App: React.FC = () => {
                       <div className="flex-grow">
                         <ActionButtons />
                         <Routes>
-                          <Route path="/overview" element={<Overview />} />
+                          <Route path="/overview" element={<TransactionsPage />} />
                           <Route path="/expenses" element={<Expenses />} />
                           <Route path="/accounts" element={<Accounts />} />
                           <Route path="/buckets" element={<Buckets />} />
-                          <Route path="*" element={<Navigate to="/" />} />
+                          <Route path="/notifications" element={<Notifications />} />
+                          {/* <Route path="*" element={<Navigate to="/" />} /> */}
                         </Routes>
                       </div>
                     </div>
@@ -101,11 +107,6 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-
-
-
-
 
 
 

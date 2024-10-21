@@ -41,6 +41,12 @@ BUCK$ aims at revolutionizing the financial industry by providing secure and rel
 
 <br><br>
 
+
+### Test Plan 
+[Project Test Plan](test.plan.md)
+
+<br><br>
+
 ## Built With
 
 Frontend 
