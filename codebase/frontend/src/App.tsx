@@ -13,9 +13,23 @@ import Contact from './components/Contact/Contact';
 import Notifications from './components/Notifications/Notifications';
 import axios from 'axios'; 
 import TransactionsPage from './components/TransactionsPage/TransactionsPage';
+import AddBucket from './components/Addition/AddBucket';
+import AddExpense from './components/Addition/AddExpense';
+import { useLocation } from 'react-router-dom';
+import DynamicRoute from './components/Addition/DynamicRoute';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  // const location = useLocation()
+
+  // const newRoute = 
+  // if (location == "/addBucket") {
+  //   newRoute = <addBucket/>
+  // }
+  // else {
+  //   newRoute = <addExpense/>
+  // }
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -39,6 +53,7 @@ const App: React.FC = () => {
       localStorage.setItem('refresh_token', response.data.refresh);
 
       console.log("LOOOOOOOOOOOOOOOOOGGGGGG access token is", response.data.access)
+      console.log("The refresh token is", response.data.refresh)
 
       console.log('Login successful, tokens stored');
       setIsAuthenticated(true);
@@ -83,7 +98,7 @@ const App: React.FC = () => {
                       {/* Left navigation bar */}
                       <NavBar />
                       {/* Main content */}
-                      <div className="flex-grow">
+                      <div className="flex-grow bg-gray-200">
                         <ActionButtons />
                         <Routes>
                           <Route path="/overview" element={<TransactionsPage />} />
@@ -91,6 +106,8 @@ const App: React.FC = () => {
                           <Route path="/accounts" element={<Accounts />} />
                           <Route path="/buckets" element={<Buckets />} />
                           <Route path="/notifications" element={<Notifications />} />
+                          <Route path="/addBucket" element={<DynamicRoute />} />
+                          <Route path="/addExpenses" element={<DynamicRoute />} />
                           {/* <Route path="*" element={<Navigate to="/" />} /> */}
                         </Routes>
                       </div>

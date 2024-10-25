@@ -1,4 +1,6 @@
 from django.http import JsonResponse
+import jwt
+from rest_framework_simplejwt.settings import api_settings
 from django.views.decorators.csrf import csrf_exempt
 from .plaid_service import plaid_client
 from .models import PlaidItem
@@ -21,12 +23,26 @@ from plaid import ApiException
 def get_csrf_token(request):
     return JsonResponse({'csrfToken': get_token(request)})
 
+@csrf_exempt
 @permission_classes([IsAuthenticated])
 def create_link_token(request):
-    print("The user requesting for Plaid is", request.user)
+    print("The user requesting for Plaid is", request.headers)
+    auth_header = request.headers.get('Authorization')
+    token = auth_header.split(' ')[1] 
+    
+    decoded_token = jwt.decode(token, options={"verify_signature": False}, algorithms=[api_settings.ALGORITHM])
+    print("Decoded Token:", decoded_token)
+    
+     
+    if auth_header:
+        print("Authorization Header:", auth_header)  # This will print the Bearer token
+        # Extract the token (Bearer token)
+        token = auth_header.split(' ')[1]
+        print("Access Token:", token)  #
+    
     
     # user = User(client_user_id=str(request.user.id))
-    
+    print("authentication is", request.user.is_authenticated)
     request_data = LinkTokenCreateRequest(
         products=[Products("transactions")],
         client_name="Expense Tracker App",
@@ -41,14 +57,8 @@ def create_link_token(request):
 
 
 
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
-from plaid import ApiException
 
+@csrf_exempt
 @permission_classes([IsAuthenticated])
 def exchange_public_token(request):
     if request.method == "POST":

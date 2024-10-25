@@ -29,14 +29,14 @@ const Accounts: React.FC = () => {
     try {
       // Fetch the link token from the server when the button is clicked
       const token = localStorage.getItem('access_token');
-      const csrfToken = Cookies.get('csrftoken') || '';
+      // const csrfToken = Cookies.get('csrftoken') || '';
+      console.log("For create_link_token, the access token is", token)
 
       const response = await fetch('http://127.0.0.1:8000/api/plaid/create_link_token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
-          'X-CSRFToken': csrfToken,
         },
       });
 

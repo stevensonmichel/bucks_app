@@ -69,7 +69,7 @@ import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 const Buckets: React.FC = () => {
   return (
     <div className="grid grid-cols-3 gap-20 p-20">
-      <div className="border-8 border-cyan-500 p-10 rounded-lg">
+      <div className="bg-white border-8 border-cyan-500 p-10 rounded-lg">
         <h2 className="text-3xl font-bold">TRANSPORTATION</h2>
         <div className="flex flex-col space-y-2 mt-4">
           <div className="flex justify-between">
@@ -92,7 +92,7 @@ const Buckets: React.FC = () => {
       </div>
       
 
-      <div className="border-8 border-cyan-500 p-10 rounded-lg">
+      <div className="bg-white border-8 border-cyan-500 p-10 rounded-lg">
         <h2 className="text-3xl font-bold">Housing</h2>
         <div className="flex flex-col space-y-2 mt-4">
           <div className="flex justify-between">
@@ -115,7 +115,7 @@ const Buckets: React.FC = () => {
       </div>
 
 
-      <div className="border-8 border-cyan-500 p-10 rounded-lg">
+      <div className="bg-white border-8 border-cyan-500 p-10 rounded-lg">
         <h2 className="text-3xl font-bold">GROCERIES</h2>
         <div className="flex flex-col space-y-2 mt-4">
           <div className="flex justify-between">
