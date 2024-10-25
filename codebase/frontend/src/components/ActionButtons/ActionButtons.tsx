@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
 
@@ -28,27 +28,29 @@ import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 
 
 
+
 const ActionButtons: React.FC = () => {
-  const [showAddBucket, setShowAddBucket] = useState<boolean>(false);
+  const location = useLocation();  // Get the current path
 
-  const handleAddBucketClick = () => {
-    setShowAddBucket((prev) => !prev); // Toggle the AddBucket form
-  };
+  // Determine where to navigate based on the current path
+  let addPath = "";
 
-  const handleAddBucket = (bucket: { name: string; description: string; budgetLimit: number }) => {
-    console.log('Bucket added:', bucket);
-    setShowAddBucket(false); // Hide the AddBucket form after submission
-  };
+  if (location.pathname === "/buckets") {
+    addPath = "/addBucket";  // Go to addBucket when on Buckets page
+  } else if (location.pathname === "/expenses") {
+    addPath = "/addExpense";  // Go to addExpense when on Expenses page
+  }
+
   return (
     <div className="flex justify-start space-x-6 p-6">
       <button className="w-10 h-10 rounded-full bg-black text-white flex justify-center items-center">
-        <Link to="/addBucket"><span className="text-2xl">+</span></Link> 
+        <Link to={addPath}><span className="text-2xl"><FaPlus /></span></Link>
       </button>
       <button className="w-10 h-10 rounded-full bg-black text-white flex justify-center items-center">
-        <Link  to="/editBucket"><span className="text-2xl">✏️</span></Link>
+        <Link to="/editBucket"><span className="text-2xl"><FaEdit /></span></Link>
       </button>
       <button className="w-10 h-10 rounded-full bg-black text-white flex justify-center items-center">
-        <Link to="/deleteBucket"><span className="text-2xl">🗑️</span></Link>
+        <Link to="/deleteBucket"><span className="text-2xl"><FaTrash /></span></Link>
       </button>
     </div>
   );

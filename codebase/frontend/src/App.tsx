@@ -107,7 +107,7 @@ const App: React.FC = () => {
                           <Route path="/buckets" element={<Buckets />} />
                           <Route path="/notifications" element={<Notifications />} />
                           <Route path="/addBucket" element={<DynamicRoute />} />
-                          <Route path="/addExpenses" element={<DynamicRoute />} />
+                          <Route path="/addExpense" element={<DynamicRoute />} />
                           {/* <Route path="*" element={<Navigate to="/" />} /> */}
                         </Routes>
                       </div>

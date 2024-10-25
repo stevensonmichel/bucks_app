@@ -1,26 +1,31 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import AddBucket from './AddBucket';
-import AddExpense from './AddExpense';
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import AddExpense from "./AddExpense";
+import AddBucket from "./AddBucket";
 
 const DynamicRoute: React.FC = () => {
-  const location = useLocation(); // Get the current location object
+  const location = useLocation();  // Get the current location to determine the route
 
-  // Initialize newRoute variable
-  let newRoute;
+  // Example list of buckets to be passed to AddExpense component
+  const [buckets, setBuckets] = useState([
+    { name: "Groceries", description: "For food shopping", stopDate: "12/31/2023", amount: 500 },
+    { name: "Utilities", description: "Electricity, Water, etc.", stopDate: "12/31/2023", amount: 300 }
+  ]);
 
-  console.log("The location is", location)
-
-  // Dynamically set the component based on the current path
-  if (location.pathname === '/buckets') {
-    newRoute = <AddBucket />;
+  // Dynamically render the component based on the current path
+  let componentToRender;
+  
+  if (location.pathname === '/addBucket') {
+    componentToRender = <AddBucket />;
+  } else if (location.pathname === '/addExpense') {
+    componentToRender = <AddExpense buckets={buckets} />;  // Pass buckets prop to AddExpense
   } else {
-    newRoute = <AddExpense />;
+    componentToRender = <div>404 - Not Found</div>;  // Fallback for unknown routes
   }
 
   return (
     <div>
-      {newRoute} {/* Render the appropriate component */}
+      {componentToRender}
     </div>
   );
 };
