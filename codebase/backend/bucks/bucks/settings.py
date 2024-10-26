@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
+
 
 load_dotenv()  # Load the environment variables from .env
 
@@ -169,6 +171,16 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),  # Set your desired lifetime
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Set your desired refresh lifetime
+    'ROTATE_REFRESH_TOKENS': True,                  # Automatically rotate refresh tokens
+    'BLACKLIST_AFTER_ROTATION': True,               # Blacklist old tokens
+}
 
 
 

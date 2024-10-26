@@ -3,27 +3,38 @@ import React, { useState, useEffect } from 'react';
 interface Expense {
   id: number;
   name: string;
+  description: string;
   amount: number;
-  category: string;
+  created_at: string;
+  bucket: string;
   date: string;  // Assuming date is in string format (e.g., '2024-10-19')
 }
 
 const ExpensesPage: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
-
-  // Simulate fetching expenses using mock data
+  
   useEffect(() => {
-    const mockExpenses: Expense[] = [
-      { id: 1, name: 'Groceries', amount: 200.50, category: 'Food', date: '2024-10-19' },
-      { id: 2, name: 'Internet', amount: 60.00, category: 'Utilities', date: '2024-10-18' },
-      { id: 3, name: 'Gas', amount: 30.25, category: 'Transport', date: '2024-10-17' },
-      { id: 4, name: 'Dining Out', amount: 45.75, category: 'Entertainment', date: '2024-10-16' },
-      { id: 5, name: 'Rent', amount: 1200.00, category: 'Housing', date: '2024-10-15' }
-    ];
-
-    // Simulating data fetch by setting mock data
-    setExpenses(mockExpenses);
+    const token = localStorage.getItem('access_token')
+    fetch('http://127.0.0.1:8000/api/expenses', {
+      method: "Get",
+      headers: {
+        "content-type": 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Expenses data are", data)
+      setExpenses(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching expenses", error);
+    })
   }, []);
+
+
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
@@ -47,10 +58,10 @@ const ExpensesPage: React.FC = () => {
             {expenses.map((expense) => (
               <tr key={expense.id} className="border-b bg-white">
                 <td className="px-4 py-4"></td>
-                <td className="px-4 py-4">{expense.name}</td>
-                <td className="px-4 py-4">${expense.amount.toFixed(2)}</td>
-                <td className="px-4 py-4">{expense.category}</td>
-                <td className="px-4 py-4">{new Date(expense.date).toLocaleDateString()}</td>
+                <td className="px-4 py-4">{expense.description}</td>
+                <td className="px-4 py-4">${expense.amount}</td>
+                <td className="px-4 py-4">{expense.bucket}</td>
+                <td className="px-4 py-4">{expense.created_at}</td>
               </tr>
             ))}
           </tbody>

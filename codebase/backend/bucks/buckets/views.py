@@ -1,21 +1,16 @@
-from django.shortcuts import render
-
-from rest_framework import generics
-from rest_framework.response import Response
+# In views.py
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from .models import Bucket
 from .serializers import BucketSerializer
 
 class BucketListView(APIView):
     def get(self, request):
-        # Simulate dynamic data
-        buckets = [
-            {"id": 1, "name": "Bucket A", "description": "This is bucket A"},
-            {"id": 2, "name": "Bucket B", "description": "This is bucket B"},
-            {"id": 3, "name": "Bucket C", "description": "This is bucket C"}
-        ]
-        return Response(buckets)
+        # Query the database for all Bucket instances
+        buckets = Bucket.objects.all()
 
-class BucketDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Bucket.objects.all()
-    serializer_class = BucketSerializer
+        # Serialize the data
+        serializer = BucketSerializer(buckets, many=True)
+
+        # Return the serialized data as a JSON response
+        return Response(serializer.data)

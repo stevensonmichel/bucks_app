@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import budgetImage from '../../assets/images/budgetImage.jpg';
+import bucketImage from '../../assets/images/bucketImage.jpg';
+import graphImage from '../../assets/images/graphImage.jpg';
+import welcomeImage from '../../assets/images/welcomeImage.jpg';
 
 // Define the type of the props
 interface LoginProps {
@@ -24,20 +28,23 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           <span className="text-xl font-bold text-black">Buck$</span>
         </div>
         <nav className="space-x-20">
-          <Link to="/signup" className="text-gray-800 hover:text-blue-500">Signup</Link>
-          <Link to="/contact" className="text-gray-800 hover:text-blue-500">Contact</Link>
+          <Link to="/signup" className="text-black font-semibold hover:text-blue-500">Signup</Link>
+          <Link to="/contact" className="text-black font-semibold hover:text-blue-500">Contact</Link>
         </nav>
       </header>
 
       {/* Welcome Section */}
       <section className="flex flex-col md:flex-row justify-between items-center bg-black text-white p-12">
-        <div className="text-center md:text-left">
-          <h1 className="text-4xl font-bold mb-16">Welcome to BUCK$</h1>
-          <div className="flex justify-center md:justify-start space-x-6">
-            <img src="/location-icon.png" alt="Location" className="h-16 w-16" />
-            <img src="/graduation-icon.png" alt="Graduation" className="h-16 w-16" />
-          </div>
+      <div className="flex flex-col items-center justify-center text-center md:text-left">
+        <h1 className="text-4xl font-bold mb-8">Welcome to BUCK$</h1>
+        <div className="flex justify-center md:justify-start">
+          <img
+            src={welcomeImage}
+            alt="Location"
+            className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 mb-4"
+          />
         </div>
+      </div>
 
         {/* Login Form */}
         <div className="bg-white text-black p-12 shadow-md w-full md:w-1/3 mt-8 md:mt-0">
@@ -77,19 +84,19 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
       {/* Why Choose BUCK$ Section */}
       <section className="bg-blue-400 text-white p-12">
-        <h2 className="text-2xl font-bold text-center mb-8">Why Choose BUCK$</h2>
+        <h2 className="text-4xl font-bold text-center mb-8">Why Choose BUCK$</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex flex-col items-center">
-            <img src="/budget-icon.png" alt="Budget" className="h-16 w-16 mb-4" />
-            <p className="text-center">Set monthly budgets to control your spending</p>
+            <img src={budgetImage} alt="Budget" className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 mb-4"/>
+            <p className="text-lg text-center">Set monthly budgets to control your spending</p>
           </div>
           <div className="flex flex-col items-center">
-            <img src="/expenses-icon.png" alt="Expenses" className="h-16 w-16 mb-4" />
-            <p className="text-center">Easily add and categorize expenses with a few taps</p>
+            <img src={bucketImage} alt="Expenses" className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 mb-4"/>
+            <p className="text-lg text-center">Easily add and categorize expenses with a few taps</p>
           </div>
           <div className="flex flex-col items-center">
-            <img src="/charts-icon.png" alt="Charts" className="h-16 w-16 mb-4" />
-            <p className="text-center">View breakdowns of where your money is going with charts and graphs</p>
+            <img src={graphImage} alt="Charts" className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 mb-4"/>
+            <p className="text-lg text-center">View breakdowns of where your money is going with charts and graphs</p>
           </div>
         </div>
       </section>

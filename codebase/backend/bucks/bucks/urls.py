@@ -25,6 +25,7 @@ def home_view(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/buckets/', include('buckets.urls')),
+    path('api/expenses/', include('expenses.urls')),
     # # path('api/login/', include('login.urls')),
     # path('api/signup/', include('signup.urls')),
     path('api/users/', include('users.urls')),
