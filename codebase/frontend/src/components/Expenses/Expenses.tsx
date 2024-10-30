@@ -50,7 +50,7 @@ const ExpensesPage: React.FC = () => {
                 <th className="px-4 py-4"></th>
                 <th className="px-4 py-4">Name</th>
                 <th className="px-4 py-4">Amount</th>
-                <th className="px-4 py-4">Category</th>
+                <th className="px-4 py-4">Bucket</th>
                 <th className="px-4 py-4">Date</th>
             </tr>
           </thead>
