@@ -89,7 +89,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Essential for populating request.user
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -176,7 +176,7 @@ USE_TZ = True
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Set your desired lifetime
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=50),  # Set your desired lifetime
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Set your desired refresh lifetime
     'ROTATE_REFRESH_TOKENS': True,                  # Automatically rotate refresh tokens
     'BLACKLIST_AFTER_ROTATION': True,               # Blacklist old tokens

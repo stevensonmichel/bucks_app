@@ -7,7 +7,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onLogout }) => {
   return (
-    <header className="flex justify-between items-center p-4 border-b-2 border-black">
+    <header className="fixed top-0 left-0 right-0 z-10 flex justify-between items-center p-4 border-b-2 border-black bg-white">
       <div className="text-4xl font-bold text-blue-500">
         <h1 className="text-shadow-sm">BUCK$</h1>
       </div>
@@ -26,7 +26,3 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
 };
 
 export default Header;
-
-
-
-

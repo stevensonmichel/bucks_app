@@ -26,7 +26,7 @@ def get_csrf_token(request):
 @csrf_exempt
 @permission_classes([IsAuthenticated])
 def create_link_token(request):
-    print("The user requesting for Plaid is", request.headers)
+    print("The user requesting for Plaid is", request.user)
     auth_header = request.headers.get('Authorization')
     token = auth_header.split(' ')[1] 
     

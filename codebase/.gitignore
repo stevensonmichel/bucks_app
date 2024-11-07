@@ -48,6 +48,9 @@ db.sqlite3
 *.log
 *.pot
 
+__pycache__/
+*.pyc
+
 # Environment variables
 .env
 

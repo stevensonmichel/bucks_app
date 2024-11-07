@@ -93,12 +93,13 @@ const App: React.FC = () => {
                 path="*"
                 element={
                   <>
-                    <Header title="Bucks" onLogout={handleLogout}/>
+                    <Header title="Bucks" onLogout={handleLogout} />
                     <div className="flex">
                       {/* Left navigation bar */}
                       <NavBar />
+
                       {/* Main content */}
-                      <div className="flex-grow bg-gray-200">
+                      <div className="flex-grow bg-gray-200 ml-[20%] mt-[4rem] p-4 overflow-auto h-screen">
                         <ActionButtons />
                         <Routes>
                           <Route path="/overview" element={<TransactionsPage />} />
@@ -108,7 +109,7 @@ const App: React.FC = () => {
                           <Route path="/notifications" element={<Notifications />} />
                           <Route path="/addBucket" element={<DynamicRoute />} />
                           <Route path="/addExpense" element={<DynamicRoute />} />
-                          <Route path="*" element={<Navigate to="/login" />} />
+                          <Route path="*" element={<Navigate to="/overview" />} />
                         </Routes>
                       </div>
                     </div>

@@ -15,8 +15,8 @@ const ExpensesPage: React.FC = () => {
   
   useEffect(() => {
     const token = localStorage.getItem('access_token')
-    fetch('http://127.0.0.1:8000/api/expenses', {
-      method: "Get",
+    fetch('http://127.0.0.1:8000/api/expenses/', {
+      method: "GET",
       headers: {
         "content-type": 'application/json',
         Authorization: `Bearer ${token}`

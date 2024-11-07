@@ -44,7 +44,7 @@ import { Link } from 'react-router-dom'
 
 const NavBar: React.FC = () => {
   return (
-    <nav className="bg-cyan-400 text-white w-1/5 h-screen p-8 space-y-10"> {/* Updated height to 100vh (h-screen) */}
+    <nav className="fixed left-0 top-0 h-screen bg-cyan-400 text-white w-1/5 p-8 space-y-10">
       <div className="flex items-center space-x-4">
         <span role="img" aria-label="overview" className="text-3xl">📣</span>
         <Link to="/overview" className="text-3xl font-semibold">Overview</Link>
@@ -62,7 +62,7 @@ const NavBar: React.FC = () => {
         <Link to="/accounts" className="text-3xl font-semibold">Accounts</Link>
       </div>
       <div className="flex items-center space-x-4">
-        <span role="img" aria-label="overview" className="text-3xl">📧</span>
+        <span role="img" aria-label="notifications" className="text-3xl">📧</span>
         <Link to="/notifications" className="text-3xl font-semibold">Notifications</Link>
       </div>
     </nav>
