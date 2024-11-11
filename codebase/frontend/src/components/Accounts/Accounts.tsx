@@ -1,71 +1,106 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { usePlaidLink } from 'react-plaid-link';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 interface BankAccount {
-  id: number;
+  id: string;
   name: string;
   type: string;
-  balance: number;
+  subtype?: string;
 }
 
 const Accounts: React.FC = () => {
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
   const [linkToken, setLinkToken] = useState<string | null>(null);
 
-  // Fetch connected bank accounts (mock data for now)
+  // Fetch connected bank accounts (replace with actual API call)
   useEffect(() => {
-    const mockBankAccounts: BankAccount[] = [
-      { id: 1, name: 'Checking Account - Bank of America', type: 'Checking', balance: 1500.75 },
-      { id: 2, name: 'Savings Account - Chase', type: 'Savings', balance: 3000.50 },
-    ];
+    const fetchBankAccounts = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+          console.error('No authentication token found');
+          return;
+        }
 
-    setBankAccounts(mockBankAccounts); // Replace with actual API data when ready
+        // Replace the URL with the endpoint that provides bank accounts
+        const response = await axios.get('http://127.0.0.1:8000/api/plaid/get_accounts/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Assuming the response contains an array of accounts
+        if (response.data) {
+          const accounts = response.data.map((account: any, index: number) => ({
+            id: account.account_id || index.toString(),
+            name: account.name || 'Unnamed Account',
+            type: account.type,
+            subtype: account.subtype,
+          }));
+          setBankAccounts(accounts);
+        }
+      } catch (error) {
+        console.error('Error fetching bank accounts:', error);
+      }
+    };
+
+    fetchBankAccounts();
   }, []);
 
   // Function to handle connecting to the bank (fetch link token and open Plaid)
   const handleConnectBank = useCallback(async () => {
     try {
-      // Fetch the link token from the server when the button is clicked
       const token = localStorage.getItem('access_token');
-      // const csrfToken = Cookies.get('csrftoken') || '';
-      console.log("For create_link_token, the access token is", token)
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
 
       const response = await fetch('http://127.0.0.1:8000/api/plaid/create_link_token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-
 
       if (!response.ok) {
         throw new Error('Failed to fetch link token');
       }
-  
+
       // Get the response data
       const data = await response.json();
-  
+
       // Set the link token in state
       setLinkToken(data.link_token);
-  
     } catch (error) {
       console.error('Error fetching link token:', error);
     }
-  }, []); 
-
+  }, []);
 
   // Plaid Link Setup (only set up when linkToken is available)
   const { open, ready } = usePlaidLink({
     token: linkToken ?? '',
     onSuccess: async (public_token, metadata) => {
       try {
+        const token = localStorage.getItem('access_token');
+
+        // Ensure token exists
+        if (!token) {
+          throw new Error('Authentication token is missing');
+        }
+
         // Send the public token to the server to exchange for access token
-        await axios.post('http://127.0.0.1:8000/api/plaid/exchange_public_token/', {
-          public_token,
-        });
+        await axios.post(
+          'http://127.0.0.1:8000/api/plaid/exchange_public_token/',
+          { public_token }, // Payload
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         console.log('Successfully connected to the bank');
       } catch (error) {
         console.error('Error exchanging public token:', error);
@@ -98,7 +133,7 @@ const Accounts: React.FC = () => {
             <tr>
               <th className="px-4 py-4">Account Name</th>
               <th className="px-4 py-4">Account Type</th>
-              <th className="px-4 py-4">Balance</th>
+              <th className="px-4 py-4">Subtype</th>
             </tr>
           </thead>
           <tbody>
@@ -106,7 +141,7 @@ const Accounts: React.FC = () => {
               <tr key={account.id} className="border-b bg-white">
                 <td className="px-4 py-4">{account.name}</td>
                 <td className="px-4 py-4">{account.type}</td>
-                <td className="px-4 py-4">${account.balance.toFixed(2)}</td>
+                <td className="px-4 py-4">{account.subtype || 'N/A'}</td>
               </tr>
             ))}
           </tbody>

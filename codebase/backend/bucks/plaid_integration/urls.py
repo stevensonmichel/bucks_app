@@ -1,8 +1,7 @@
 from django.urls import path
-from .views import create_link_token, exchange_public_token, get_transactions
-
+from .views import CreateLinkTokenView, ExchangePublicTokenView, GetTransactionView
 urlpatterns = [
-    path('create_link_token/', create_link_token, name='create_link_token'),
-    path('exchange_public_token/', exchange_public_token, name='exchange_public_token'),
-    path('get_transactions/', get_transactions, name='get_transactions'),
+    path('create_link_token/', CreateLinkTokenView.as_view(), name='create_link_token'),
+    path('exchange_public_token/', ExchangePublicTokenView.as_view(), name='exchange_public_token'),
+    path('get_transactions/', GetTransactionView.as_view(), name='get_transactions'),
 ]
