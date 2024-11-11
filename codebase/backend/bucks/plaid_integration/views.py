@@ -8,6 +8,7 @@ from .models import PlaidItem
 from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
 from plaid.model.link_token_create_request import LinkTokenCreateRequest
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
+from plaid.model.accounts_get_request import AccountsGetRequest
 from plaid.model.country_code import CountryCode
 from plaid.model.products import Products
 import json
@@ -19,6 +20,7 @@ from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchan
 from plaid.model.transactions_get_request import TransactionsGetRequest
 
 from plaid import ApiException
+from accounts.models import Account
 
 
 # @api_view(['GET'])
@@ -30,25 +32,7 @@ class CreateLinkTokenView(APIView):
     permission_classes = [IsAuthenticated]  # Enforce authentication if needed
     
     def post(self, request):
-        print("The user requesting for Plaid is", request.user)
         
-        print("The user requesting for Plaid is", request.user)
-        auth_header = request.headers.get('Authorization')
-        token = auth_header.split(' ')[1] 
-        
-        decoded_token = jwt.decode(token, options={"verify_signature": False}, algorithms=[api_settings.ALGORITHM])
-        print("Decoded Token:", decoded_token)
-        
-        
-        if auth_header:
-            print("Authorization Header:", auth_header)  # This will print the Bearer token
-            # Extract the token (Bearer token)
-            token = auth_header.split(' ')[1]
-            print("Access Token:", token)  #
-        
-        
-        # user = User(client_user_id=str(request.user.id))
-        print("authentication is", request.user.is_authenticated)
         request_data = LinkTokenCreateRequest(
             products=[Products("transactions")],
             client_name="Expense Tracker App",
@@ -56,9 +40,9 @@ class CreateLinkTokenView(APIView):
             language="en",
             user=LinkTokenCreateRequestUser(client_user_id=str(request.user.id)),
         )
-        print("The request data is", request_data)
+        
         response = plaid_client.link_token_create(request_data)
-        print("The response from create_link_token is ", response)
+
         return JsonResponse(response.to_dict())
 
 
@@ -71,8 +55,6 @@ class ExchangePublicTokenView(APIView):
             # Parse JSON from request body
             try:
                 user = request.user
-                print(100*"@")
-                print(user)
                 data = json.loads(request.body)
                 public_token = data.get('public_token')
 
@@ -85,6 +67,9 @@ class ExchangePublicTokenView(APIView):
                     # Extract the access token and item ID
                     access_token = exchange_response['access_token']
                     item_id = exchange_response['item_id']
+                    accounts_request = AccountsGetRequest(access_token=access_token)
+                    accounts_response = plaid_client.accounts_get(accounts_request)
+                    accounts = accounts_response['accounts']
                     
                     plaid_item, created = PlaidItem.objects.get_or_create(
                             user=user,  # Associate with the currently logged-in user
@@ -94,21 +79,23 @@ class ExchangePublicTokenView(APIView):
                             }
                             
                         )
-                    print(1000*"@")
-                    print(plaid_item)
-
-                if not created:
-                    # If PlaidItem already exists, update the access_token and item_id
-                    plaid_item.access_token = access_token
-                    plaid_item.item_id = item_id
-                    plaid_item.save()
+                    
+                    if not created:
+                        # If PlaidItem already exists, update the access_token and item_id
+                        plaid_item.access_token = access_token
+                        plaid_item.item_id = item_id
+                        plaid_item.save()
+                        
+                    for account in accounts:
+                        save_bank_information(account, user)
 
                     return JsonResponse({
                         'access_token': access_token,
                         'item_id': item_id
                     })
-                else:
-                    return JsonResponse({'error': 'No public_token provided'}, status=400)
+                
+                
+                return JsonResponse({'error': 'No public_token provided'}, status=400)
             except json.JSONDecodeError:
                 return JsonResponse({'error': 'Invalid JSON'}, status=400)
         else:
@@ -116,23 +103,35 @@ class ExchangePublicTokenView(APIView):
 
 
 
-# Get Transactions
-def get_bank_information(data):
-    """Extracts bank account-related information from Plaid data."""
-    accounts = data.get('accounts', [])
-    bank_info = []
-    for account in accounts:
-        bank_info.append({
-            
-            "official_name": account.get("official_name"),
-            "type": account.get("type"),
-            "subtype": account.get("subtype"),
-            # "account_name": account.get("name"),
-            # "current_balance": account.get("balances", {}).get("current"),
-            # "available_balance": account.get("balances", {}).get("available"),
-            # "currency": account.get("balances", {}).get("iso_currency_code")
-        })
-    return bank_info
+def save_bank_information(data, user):
+    plaid_account_id = data['account_id']  # Extract from Plaid data
+    name = data.get('official_name', 'Unnamed Account')
+    account_type = data['type']
+    subtype = data.get('subtype', '')
+    balance = data['balances'].get('current', '')
+
+    # Use get_or_create to avoid creating duplicates based on the plaid_account_id
+    account, created = Account.objects.get_or_create(
+        user=user,
+        plaid_account_id=plaid_account_id,
+        defaults={
+            'name': name,
+            'type': account_type,
+            'subtype': subtype,
+            'balance': balance,
+        }
+    )
+
+    if not created:
+        # Update the existing account if necessary
+        account.name = name
+        account.type = account_type
+        account.subtype = subtype
+        account.balance = balance
+        account.save()
+
+    return
+
 
 def get_transaction_count(data):
     """Returns the total number of transactions."""

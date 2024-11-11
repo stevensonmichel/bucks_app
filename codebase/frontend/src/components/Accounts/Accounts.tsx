@@ -24,7 +24,7 @@ const Accounts: React.FC = () => {
         }
 
         // Replace the URL with the endpoint that provides bank accounts
-        const response = await axios.get('http://127.0.0.1:8000/api/plaid/get_accounts/', {
+        const response = await axios.get('http://127.0.0.1:8000/api/accounts/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
