@@ -9,6 +9,7 @@ interface Expense {
 }
 
 interface Bucket {
+  id: string,
   name: string;
   description: string;
   stopDate: string;
@@ -134,7 +135,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
             htmlFor="date"
             className="block text-gray-700 font-bold mb-2"
           >
-            Deadline (MM/DD/YYYY)
+            Date (MM/DD/YYYY)
           </label>
           <input
             type="date"
@@ -164,7 +165,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
               Select a bucket
             </option>
             {buckets.map((bucket) => (
-              <option key={bucket.name} value={bucket.name}>
+              <option key={bucket.id} value={bucket.id}>{bucket.id} - 
                 {bucket.name}
               </option>
             ))}

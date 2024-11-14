@@ -8,4 +8,4 @@ from django.views.decorators.csrf import csrf_exempt
 class ExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
-        fields = ['description', 'amount', 'date', 'bucket'] 
+        fields = ['name', 'description', 'amount', 'date', 'bucket'] 

@@ -47,21 +47,21 @@ const ExpensesPage: React.FC = () => {
         <table className="min-w-full table-auto bg-gray-100 shadow-md rounded-lg">
           <thead className="bg-cyan-400 text-white">
             <tr>
-                <th className="px-4 py-4"></th>
-                <th className="px-4 py-4">Name</th>
-                <th className="px-4 py-4">Amount</th>
-                <th className="px-4 py-4">Bucket</th>
-                <th className="px-4 py-4">Date</th>
+                <th className="px-4 py-4 text-left">No</th>
+                <th className="px-4 py-4 text-left">Name</th>
+                <th className="px-4 py-4 text-left">Amount</th>
+                <th className="px-4 py-4 text-left">Bucket</th>
+                <th className="px-4 py-4 text-left">Date</th>
             </tr>
           </thead>
           <tbody>
-            {expenses.map((expense) => (
+            {expenses.map((expense, i) => (
               <tr key={expense.id} className="border-b bg-white">
-                <td className="px-4 py-4"></td>
-                <td className="px-4 py-4">{expense.description}</td>
-                <td className="px-4 py-4">${expense.amount}</td>
-                <td className="px-4 py-4">{expense.bucket}</td>
-                <td className="px-4 py-4">{expense.created_at}</td>
+                <td className="px-4 py-4 text-left">{i + 1}</td>
+                <td className="px-4 py-4 text-left">{expense.name ? expense.name : expense.description}</td>
+                <td className="px-4 py-4 text-left">${expense.amount}</td>
+                <td className="px-4 py-4 text-left">{expense.bucket}</td>
+                <td className="px-4 py-4 text-left">{expense.date}</td>
               </tr>
             ))}
           </tbody>

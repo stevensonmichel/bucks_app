@@ -7,7 +7,8 @@ from accounts.models import Account
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link to the User
     bucket = models.ForeignKey(Bucket, on_delete=models.CASCADE)  # Link to the Bucket (category)
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)  # Link to the Account
+    name = models.CharField(max_length=255) 
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, blank=True)  # Link to the Account
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Expense amount
     description = models.TextField(blank=True, null=True)  # Optional description of the expense
     date = models.DateField()  # Date of the expense
