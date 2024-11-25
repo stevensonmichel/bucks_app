@@ -97,6 +97,27 @@ const Buckets: React.FC = () => {
     .catch((error) => console.error("Error fetching buckets:", error));
 }, []);
 
+const handleDelete = (id: number) => {
+  // Retrieve the token from localStorage
+  const token = localStorage.getItem("access_token");
+
+  fetch(`http://127.0.0.1:8000/api/buckets/${id}/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        setBuckets((prevBuckets) => prevBuckets.filter((bucket) => bucket.id !== id));
+        alert("Bucket deleted successfully!");
+      } else {
+        alert("Failed to delete bucket.");
+      }
+    })
+    .catch((error) => console.error("Error deleting bucket:", error));
+};
+
   return (
     <div className="grid grid-cols-3 gap-20 p-20">
       {buckets.map((bucket: Bucket) => (

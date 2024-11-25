@@ -4,7 +4,7 @@ interface Notification {
   id: number;
   message: string;
   type: 'expense' | 'bucket' | 'account' | 'other'; // Type of activity
-  createdAt: Date;
+  date: Date;
 }
 
 const Notifications: React.FC = () => {
@@ -16,33 +16,23 @@ const Notifications: React.FC = () => {
 
   // Example data (this could come from an API or be dynamically added)
   useEffect(() => {
-    const fetchNotifications = async () => {
-      // Simulating fetching data from an API
-      const mockNotifications: Notification[] = [
-        {
-          id: 1,
-          message: 'You added a new expense: $200 for groceries',
-          type: 'expense',
-          createdAt: new Date(),
-        },
-        {
-          id: 2,
-          message: 'You created a new bucket: "Vacation Savings"',
-          type: 'bucket',
-          createdAt: new Date(),
-        },
-        {
-          id: 3,
-          message: 'Your account balance was updated: $1500',
-          type: 'account',
-          createdAt: new Date(),
-        },
-      ];
-      setNotifications(mockNotifications);
-    };
-
-    fetchNotifications();
+    const token = localStorage.getItem('access_token');
+    fetch('http://127.0.0.1:8000/api/notifications/', {
+      method: "GET",
+      headers: {
+        "content-type": 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setNotifications(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching expenses", error);
+    });
   }, []);
+
 
   // Handlers for Edit and Delete actions
   const handleEdit = (id: number) => {
@@ -51,9 +41,21 @@ const Notifications: React.FC = () => {
 
   const handleDelete = (id: number) => {
     const confirmed = window.confirm('Are you sure you want to delete this notification?');
-    if (confirmed) {
-      setNotifications((prev) => prev.filter((notification) => notification.id !== id));
-    }
+    if (!confirmed) return;
+  
+    const token = localStorage.getItem('access_token');
+  
+    fetch(`http://127.0.0.1:8000/api/notifications/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Failed to delete notification');
+        setNotifications((prev) => prev.filter((notification) => notification.id !== id));
+      })
+      .catch((error) => console.error('Error deleting notification:', error));
   };
 
   // Handle item selection
@@ -109,8 +111,7 @@ const Notifications: React.FC = () => {
                   <div>
                     <p className="text-lg font-semibold">{notification.message}</p>
                     <p className="text-sm text-gray-500">
-                      {notification.createdAt.toLocaleDateString()}{' '}
-                      {notification.createdAt.toLocaleTimeString()}
+                      {notification.date ? new Date(notification.date).toLocaleDateString() : 'N/A'}{' '}
                     </p>
                   </div>
                 </div>

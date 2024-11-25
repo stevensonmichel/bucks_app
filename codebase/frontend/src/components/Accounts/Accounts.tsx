@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePlaidLink } from 'react-plaid-link';
 import axios from 'axios';
+import { error } from 'console';
 
 interface BankAccount {
-  id: string;
+  id: number;
   name: string;
   type: string;
   subtype?: string;
@@ -13,7 +14,7 @@ interface BankAccount {
 const Accounts: React.FC = () => {
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
   const [linkToken, setLinkToken] = useState<string | null>(null);
-  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null); // Track selected account
+  const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null); // Track selected account
   const navigate = useNavigate();
 
   // Fetch connected bank accounts
@@ -34,7 +35,7 @@ const Accounts: React.FC = () => {
 
         if (response.data) {
           const accounts = response.data.map((account: any, index: number) => ({
-            id: account.account_id || index.toString(),
+            id: account.id,
             name: account.name || 'Unnamed Account',
             type: account.type,
             subtype: account.subtype,
@@ -53,6 +54,7 @@ const Accounts: React.FC = () => {
   const handleConnectBank = useCallback(async () => {
     try {
       const token = localStorage.getItem('access_token');
+      console.log("The token from delete accoutn is", token);
       if (!token) {
         throw new Error('No authentication token found');
       }
@@ -116,16 +118,28 @@ const Accounts: React.FC = () => {
   }, [linkToken, open]);
 
   // Handle account selection
-  const handleSelectAccount = (id: string) => {
+  const handleSelectAccount = (id: number) => {
     setSelectedAccountId((prevId) => (prevId === id ? null : id)); // Toggle selection
   };
 
   // Handle account deletion
-  const handleDeleteAccount = (id: string) => {
+  const handleDeleteAccount = (id: number) => {
     const confirmed = window.confirm('Are you sure you want to delete this account?');
-    if (confirmed) {
-      setBankAccounts((prev) => prev.filter((account) => account.id !== id));
-    }
+    console.log("The id of the account is", id)
+    if (!confirmed) return 
+
+    const token = localStorage.getItem('access_token');
+    fetch(`http://127.0.0.1:8000/api/accounts/${id}/`, {
+      method : 'DELETE',
+      headers: {
+        Authentication: `Bearer ${token}`
+        }
+      })
+      .then((response) => {
+        if (!response.ok) throw new Error('Failed to delete account')
+        setBankAccounts((prev) => prev.filter((account) => account.id !== id))
+      })
+      .catch((error) => console.error("Error deleting this account", error))
   };
 
   return (
@@ -142,6 +156,8 @@ const Accounts: React.FC = () => {
               <th className="px-4 py-4 text-left">Account Name</th>
               <th className="px-4 py-4 text-left">Account Type</th>
               <th className="px-4 py-4 text-left">Subtype</th>
+              <th className="px-4 py-4 text-left">Actions</th>
+
             </tr>
           </thead>
           <tbody>
@@ -156,8 +172,8 @@ const Accounts: React.FC = () => {
                 <td className="px-4 py-4 text-left">{i + 1}</td>
                 <td className="px-4 py-4 text-left">{account.name}</td>
                 <td className="px-4 py-4 text-left">{account.type}</td>
+                <td className="px-4 py-4 text-left">{account.subtype}</td>
                 <td className="px-4 py-4 text-left relative">
-                  {account.subtype || 'N/A'}
                   {selectedAccountId === account.id && (
                     <button
                       onClick={(e) => {

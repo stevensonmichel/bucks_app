@@ -6,45 +6,42 @@ from rest_framework.response import Response
 from .models import Bucket
 from .serializers import BucketSerializer
 from rest_framework import generics
+from notifications.models import Notification
+from django.utils import timezone
 
 class BucketListView(APIView):
     def get(self, request):
-        # Query the database for all Bucket instances
         buckets = Bucket.objects.all()
-        print("From Buckets, the user is", request.user, request.user.id)
-        
-
-        # Serialize the data
         serializer = BucketSerializer(buckets, many=True)
-
-        # Return the serialized data as a JSON response
         return Response(serializer.data)
     
-  
-
-
-# @method_decorator(csrf_exempt, name='dispatch')
+    
 class BucketAddView(generics.CreateAPIView):
     queryset = Bucket.objects.all()
     serializer_class = BucketSerializer
 
     def perform_create(self, serializer):
-        # Custom logic for creating a bucket, if applicable
         user = self.request.user
         if user.is_authenticated:
             print("Adding new bucket for user:", user, user.id)
-            serializer.save(user=user)  # Save with user if applicable
+            serializer.save(user=user)
         else:
-            # Handle cases where the user is not authenticated (if required)
             print("Anonymous user adding a bucket")
             serializer.save()
 
     def create(self, request, *args, **kwargs):
-        # Optionally print the payload for debugging
         print("Received payload:", request.data)
-
         try:
             response = super().create(request, *args, **kwargs)
+            user = request.user
+            bucket = request.data 
+            Notification.objects.create(
+                user=user,
+                message=f'A new bucket "{bucket["name"]}" has been created.',
+                type='bucket',
+                date=timezone.now(),
+                read=False,
+            )
             return Response(
                 {
                     "message": "Bucket added successfully!",
@@ -59,3 +56,49 @@ class BucketAddView(generics.CreateAPIView):
                 {"error": "Failed to add bucket", "details": str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+            
+
+class BucketDetailView(APIView):
+    def get_object(self, pk):
+        try:
+            return Bucket.objects.get(pk=pk)
+        except Bucket.DoesNotExist:
+            return None
+        
+    def get(self, request, pk, format=None):
+        bucket = self.get_object(pk)
+        if bucket is None:
+            return Response({"error": "Bucket not found."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = BucketSerializer(bucket)
+        return Response(serializer.data)
+    
+    def put(self, request, pk, format=None):
+        bucket = self.get_object(pk)
+        if bucket is None:
+            return Response({"error": "Bucket not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = BucketSerializer(bucket, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, pk, format=None):
+        bucket = self.get_object(pk)
+        if bucket is None:
+            return Response({"error": "Bucket not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = BucketSerializer(bucket, data=request.data, partial=True)  # Partial update
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk, format=None):
+        bucket = self.get_object(pk)
+        if bucket is None:
+            return Response({"error": "Bucket not found."}, status=status.HTTP_404_NOT_FOUND)
+        bucket.delete()
+        return Response({"message": "Bucket deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+            
+        

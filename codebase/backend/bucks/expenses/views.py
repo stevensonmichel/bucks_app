@@ -3,6 +3,8 @@ from rest_framework.views import APIView, status
 from .models import Expense
 from rest_framework.response import Response
 from .serializers import ExpenseSerializer
+from django.utils import timezone
+from notifications.models import Notification
 
 class ExpenseListView(generics.ListCreateAPIView):
     def get(self, request):
@@ -40,6 +42,16 @@ class ExpenseAddView(generics.CreateAPIView):
 
         try:
             response = super().create(request, *args, **kwargs)
+            user = request.user
+            expense = request.data
+            
+            Notification.objects.create(
+                user=user,
+                message=f'A new expense "{expense["name"]}" has been created.',
+                type="expense",
+                date=timezone.now(),
+            )
+            
             return Response(
                 {
                     "message": "Expense added successfully!",
@@ -59,6 +71,47 @@ class ExpenseAddView(generics.CreateAPIView):
         
 
 class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
-    
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
+    
+    def get_object(self, pk):
+        try:
+            return Expense.objects.get(pk=pk)
+        except Expense.DoesNotExist:
+            return None
+
+    def get(self, request, pk, format=None):
+        expense = self.get_object(pk)
+        if expense is None:
+            return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ExpenseSerializer(expense)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        expense = self.get_object(pk)
+        if expense is None:
+            return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = ExpenseSerializer(expense, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, pk, format=None):
+        expense = self.get_object(pk)
+        if expense is None:
+            return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = ExpenseSerializer(expense, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        expense = self.get_object(pk)
+        if expense is None:
+            return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
+        expense.delete()
+        return Response({"message": "Expense deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
