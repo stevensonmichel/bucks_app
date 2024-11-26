@@ -1,72 +1,55 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-interface Bucket {
-  name: string;
-  description: string;
-  deadline: string;
-  amount: number;
-}
+interface EditExpenseProps {}
 
-interface AddBucketProps {
-  onAddBucket?: (bucket: Bucket) => void; // Optional callback for parent component
-}
-
-const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [deadline, setStopDate] = useState<string>("");
-  const [amount, setAmount] = useState<number | "">("");
-
+const EditExpense: React.FC<EditExpenseProps> = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const expense = location.state?.expense; // Access passed expense data
+  const [name, setName] = useState<string>(expense?.name || "");
+  const [description, setDescription] = useState<string>(expense?.description || "");
+  const [amount, setAmount] = useState<number | "">(expense?.amount || "");
+  const [date, setDate] = useState<string>(expense?.date || "");
+  const [bucket, setBucket] = useState<string>(expense?.bucket || "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description || !deadline || amount === "") {
+    if (!name || !description || !amount || !date || !bucket) {
       alert("Please fill in all fields");
       return;
     }
 
-    const newBucket: Bucket = {
+    const updatedExpense = {
+      id: expense.id,
       name,
       description,
-      deadline,
       amount: Number(amount),
+      date,
+      bucket,
     };
 
-    // Send the bucket data to the Django backend
     try {
       const token = localStorage.getItem("access_token");
-      console.log("From Add Bucket, the access token is", token);
 
-      const response = await fetch("http://127.0.0.1:8000/api/buckets/add/", {
-        method: "POST",
+      const response = await fetch(`http://127.0.0.1:8000/api/expenses/${expense.id}/`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newBucket),
+        body: JSON.stringify(updatedExpense),
       });
 
       if (response.ok) {
-        // Clear the form fields after successful submission
-        setName("");
-        setDescription("");
-        setStopDate("");
-        setAmount("");
-
-        // Optional: Invoke callback if provided
-        if (onAddBucket) {
-          onAddBucket(newBucket);
-        }
-
-        // Navigate to the "Buckets" URL
-        navigate("/buckets");
+        alert("Expense updated successfully!");
+        navigate("/expenses");
       } else {
         const errorData = await response.json();
-        console.error("Error adding bucket:", errorData);
-        alert("Failed to add bucket");
+        console.error("Error updating expense:", errorData);
+        alert("Failed to update expense");
       }
     } catch (error) {
       console.error("Error during request:", error);
@@ -76,11 +59,11 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
 
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-md mx-auto mt-6">
-      <h2 className="text-2xl font-bold text-center mb-4">Add New Bucket</h2>
+      <h2 className="text-2xl font-bold text-center mb-4">Edit Expense</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
-            Bucket Name
+            Name
           </label>
           <input
             type="text"
@@ -109,27 +92,7 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="stopDate"
-            className="block text-gray-700 font-bold mb-2"
-          >
-            Deadline (MM/DD/YYYY)
-          </label>
-          <input
-            type="date"
-            id="stopDate"
-            value={deadline}
-            onChange={(e) => setStopDate(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="amount"
-            className="block text-gray-700 font-bold mb-2"
-          >
+          <label htmlFor="amount" className="block text-gray-700 font-bold mb-2">
             Amount ($)
           </label>
           <input
@@ -144,18 +107,45 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
           />
         </div>
 
+        <div className="mb-4">
+          <label htmlFor="date" className="block text-gray-700 font-bold mb-2">
+            Date (MM/DD/YYYY)
+          </label>
+          <input
+            type="date"
+            id="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="bucket" className="block text-gray-700 font-bold mb-2">
+            Bucket
+          </label>
+          <input
+            type="text"
+            id="bucket"
+            value={bucket}
+            onChange={(e) => setBucket(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
+
         <div className="flex space-x-8">
           <button
             type="submit"
             className="flex-1 bg-blue-500 text-white p-2 rounded-lg font-bold hover:bg-blue-600"
           >
-            Add Bucket
+            Save Changes
           </button>
-
           <button
             type="button"
             className="flex-1 bg-gray-500 text-white p-2 rounded-lg font-bold hover:bg-gray-600"
-            onClick={() => navigate("/buckets")} // Navigate to "/buckets"
+            onClick={() => navigate("/expenses")}
           >
             Cancel
           </button>
@@ -165,4 +155,4 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
   );
 };
 
-export default AddBucket;
+export default EditExpense;

@@ -13,23 +13,14 @@ import Contact from './components/Contact/Contact';
 import Notifications from './components/Notifications/Notifications';
 import axios from 'axios'; 
 import TransactionsPage from './components/TransactionsPage/TransactionsPage';
-import AddBucket from './components/Addition/AddBucket';
-import AddExpense from './components/Addition/AddExpense';
-import { useLocation } from 'react-router-dom';
 import DynamicRoute from './components/Addition/DynamicRoute';
+import Profile from './components/Profile/Profile';
+import EditBucket from './components/Editing/EditBucket';
+import EditExpense from './components/Editing/EditExpense';
+import EditAccount from './components/Editing/EditAccount';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  // const location = useLocation()
-
-  // const newRoute = 
-  // if (location == "/addBucket") {
-  //   newRoute = <addBucket/>
-  // }
-  // else {
-  //   newRoute = <addExpense/>
-  // }
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -109,6 +100,10 @@ const App: React.FC = () => {
                           <Route path="/notifications" element={<Notifications />} />
                           <Route path="/addBucket" element={<DynamicRoute />} />
                           <Route path="/addExpense" element={<DynamicRoute />} />
+                          <Route path="/profile" element={<Profile />} />
+                          <Route path="/edit-bucket/:id" element={<EditBucket />} />
+                          <Route path="/edit-expense/:id" element={<EditExpense />} />
+                          <Route path="/edit-account/:id" element={<EditAccount />} />
                           <Route path="*" element={<Navigate to="/overview" />} />
                         </Routes>
                       </div>

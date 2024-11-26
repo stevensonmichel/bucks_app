@@ -188,7 +188,7 @@ USE_TZ = True
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=50),  # Set your desired lifetime
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  # Set your desired lifetime
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Set your desired refresh lifetime
     'ROTATE_REFRESH_TOKENS': True,                  # Automatically rotate refresh tokens
     'BLACKLIST_AFTER_ROTATION': True,               # Blacklist old tokens

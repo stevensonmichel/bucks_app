@@ -122,6 +122,13 @@ const Accounts: React.FC = () => {
     setSelectedAccountId((prevId) => (prevId === id ? null : id)); // Toggle selection
   };
 
+  const handleEdit = (id: number) => {
+    const accountToEdit = bankAccounts.find((account) => account.id === id);
+    if (accountToEdit) {
+      navigate(`/edit-account/${id}`, { state: { account: accountToEdit } });
+    }
+  };
+
   // Handle account deletion
   const handleDeleteAccount = (id: number) => {
     const confirmed = window.confirm('Are you sure you want to delete this account?');
@@ -143,8 +150,16 @@ const Accounts: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-4xl font-bold mb-6">Connected Bank Accounts</h2>
+    <div className="max-w-5xl mx-auto p-8 bg-gray-400 shadow-md rounded-lg">
+      <div className="mt-0">
+        <button
+          onClick={handleConnectBank}
+          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+        >
+          Connect to Bank
+        </button>
+      </div>
+      <br></br>
 
       {bankAccounts.length === 0 ? (
         <p className="text-gray-600">No bank accounts connected.</p>
@@ -154,7 +169,7 @@ const Accounts: React.FC = () => {
             <tr>
               <th className="px-4 py-4 text-left">No</th>
               <th className="px-4 py-4 text-left">Account Name</th>
-              <th className="px-4 py-4 text-left">Account Type</th>
+              <th className="px-4 py-4 text-left">Type</th>
               <th className="px-4 py-4 text-left">Subtype</th>
               <th className="px-4 py-4 text-left">Actions</th>
 
@@ -175,6 +190,16 @@ const Accounts: React.FC = () => {
                 <td className="px-4 py-4 text-left">{account.subtype}</td>
                 <td className="px-4 py-4 text-left relative">
                   {selectedAccountId === account.id && (
+                    <div
+                      className="absolute top-4 right-4 flex space-x-2"
+                      onClick={(e) => e.stopPropagation()} // Prevent parent click event
+                    >
+                    <button
+                      onClick={() => handleEdit(account.id)}
+                      className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
+                      >
+                      Edit
+                    </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation(); // Prevent row click
@@ -184,6 +209,7 @@ const Accounts: React.FC = () => {
                     >
                       Delete
                     </button>
+                  </div>
                   )}
                 </td>
               </tr>
@@ -192,14 +218,7 @@ const Accounts: React.FC = () => {
         </table>
       )}
 
-      <div className="mt-6">
-        <button
-          onClick={handleConnectBank}
-          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
-        >
-          Connect to Bank
-        </button>
-      </div>
+      
     </div>
   );
 };

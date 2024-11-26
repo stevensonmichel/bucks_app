@@ -34,7 +34,8 @@ class AccountDetailView(APIView):
         if account is None:
             return Response({"error": "Account not found"}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = AccountSerializer(account)
+        serializer = AccountSerializer(account, data=request.data)
+        print("The request touches here", request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

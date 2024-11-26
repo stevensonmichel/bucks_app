@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Expense {
   name: string;
@@ -9,7 +10,7 @@ interface Expense {
 }
 
 interface Bucket {
-  id: string,
+  id: string;
   name: string;
   description: string;
   stopDate: string;
@@ -26,6 +27,8 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
   const [amount, setAmount] = useState<number | "">("");
   const [date, setDate] = useState<string>("");
   const [bucket, setBucket] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,13 +48,13 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
 
     // Send the expense data to the Django backend
     try {
-    const token = localStorage.getItem('access_token')
-    console.log("From Add Expense, the access token is", token)
-    const response = await fetch("http://127.0.0.1:8000/api/expenses/add/", {
+      const token = localStorage.getItem("access_token");
+      console.log("From Add Expense, the access token is", token);
+      const response = await fetch("http://127.0.0.1:8000/api/expenses/add/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newExpense),
       });
@@ -165,8 +168,8 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
               Select a bucket
             </option>
             {buckets.map((bucket) => (
-              <option key={bucket.id} value={bucket.id}>{bucket.id} - 
-                {bucket.name}
+              <option key={bucket.id} value={bucket.id}>
+                {bucket.id} - {bucket.name}
               </option>
             ))}
           </select>
@@ -183,9 +186,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
           <button
             type="button"
             className="flex-1 bg-gray-500 text-white p-2 rounded-lg font-bold hover:bg-gray-600"
-            onClick={() => {
-              console.log("Cancel clicked");
-            }}
+            onClick={() => navigate("/expenses")} // Navigate to "/expenses"
           >
             Cancel
           </button>

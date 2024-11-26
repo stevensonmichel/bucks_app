@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Expense {
   id: number;
   name: string;
   description: string;
   amount: number;
-  created_at: string;
   bucket: string;
   date: string;
 }
@@ -13,11 +13,32 @@ interface Expense {
 const Expenses: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [selectedExpenseId, setSelectedExpenseId] = useState<number | null>(null);
-
+  const navigate = useNavigate();
   const expenseListRef = useRef<HTMLTableElement | null>(null);
 
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    fetch('http://127.0.0.1:8000/api/expenses/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setExpenses(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching expenses', error);
+      });
+  }, []);
+
   const handleEdit = (id: number) => {
-    alert(`Edit expense with ID: ${id}`);
+    const expenseToEdit = expenses.find((expense) => expense.id === id);
+    if (expenseToEdit) {
+      navigate(`/edit-expense/${id}`, { state: { expense: expenseToEdit } }); // Pass expense data
+    }
   };
 
   const handleDelete = (id: number) => {
@@ -40,27 +61,8 @@ const Expenses: React.FC = () => {
   };
 
   const handleSelect = (id: number) => {
-    // Correctly toggle the selection for only one row
-    setSelectedExpenseId((prevId) => (prevId === id ? null : id));
+    setSelectedExpenseId((prevId) => (prevId === id ? null : id)); // Toggle selection
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    fetch('http://127.0.0.1:8000/api/expenses/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setExpenses(data);
-      })
-      .catch((error) => {
-        console.error('Error fetching expenses', error);
-      });
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -76,9 +78,7 @@ const Expenses: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-4xl font-bold mb-6">All Expenses</h2>
-
+    <div className="max-w-5xl mx-auto p-8 bg-gray-400 shadow-md rounded-lg">
       {expenses.length === 0 ? (
         <p className="text-gray-600">No expenses found.</p>
       ) : (
