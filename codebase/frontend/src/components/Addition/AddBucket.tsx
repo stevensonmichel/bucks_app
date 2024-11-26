@@ -35,7 +35,6 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
       amount: Number(amount),
     };
 
-    // Send the bucket data to the Django backend
     try {
       const token = localStorage.getItem("access_token");
       console.log("From Add Bucket, the access token is", token);
@@ -50,18 +49,15 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
       });
 
       if (response.ok) {
-        // Clear the form fields after successful submission
         setName("");
         setDescription("");
         setStopDate("");
         setAmount("");
 
-        // Optional: Invoke callback if provided
         if (onAddBucket) {
           onAddBucket(newBucket);
         }
 
-        // Navigate to the "Buckets" URL
         navigate("/buckets");
       } else {
         const errorData = await response.json();
@@ -155,7 +151,7 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
           <button
             type="button"
             className="flex-1 bg-gray-500 text-white p-2 rounded-lg font-bold hover:bg-gray-600"
-            onClick={() => navigate("/buckets")} // Navigate to "/buckets"
+            onClick={() => navigate("/buckets")} 
           >
             Cancel
           </button>

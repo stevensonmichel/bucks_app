@@ -6,7 +6,7 @@ interface Expense {
   description: string;
   amount: number;
   date: string;
-  bucket: string; // This can reference the bucket's name or ID
+  bucket: string; 
 }
 
 interface Bucket {
@@ -18,7 +18,7 @@ interface Bucket {
 }
 
 interface AddExpenseProps {
-  buckets: Bucket[]; // Pass the available buckets to select from
+  buckets: Bucket[]; 
 }
 
 const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
@@ -46,7 +46,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
       bucket,
     };
 
-    // Send the expense data to the Django backend
+
     try {
       const token = localStorage.getItem("access_token");
       console.log("From Add Expense, the access token is", token);
@@ -60,7 +60,6 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
       });
 
       if (response.ok) {
-        // Clear the form fields after successful submission
         setName("");
         setDescription("");
         setAmount("");
@@ -144,7 +143,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
             type="date"
             id="date"
             value={date}
-            onChange={(e) => setDate(e.target.value)} // Update the state on change
+            onChange={(e) => setDate(e.target.value)} 
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
@@ -186,7 +185,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
           <button
             type="button"
             className="flex-1 bg-gray-500 text-white p-2 rounded-lg font-bold hover:bg-gray-600"
-            onClick={() => navigate("/expenses")} // Navigate to "/expenses"
+            onClick={() => navigate("/expenses")} 
           >
             Cancel
           </button>

@@ -19,7 +19,6 @@ function Contact() {
     e.preventDefault();
     console.log('Form data submitted:', formData);
     
-    // Clear form after submission
     setFormData({
       name: '',
       email: '',

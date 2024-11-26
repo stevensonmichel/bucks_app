@@ -1,5 +1,4 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getTransactions } from '../../services/PlaidService';
 
 const TransactionsPage = () => {

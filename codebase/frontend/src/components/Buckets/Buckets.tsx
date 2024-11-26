@@ -10,10 +10,10 @@ interface Bucket {
 
 const Buckets: React.FC = () => {
   const [buckets, setBuckets] = useState<Bucket[]>([]);
-  const [selectedBucketId, setSelectedBucketId] = useState<number | null>(null); // Track selected bucket
+  const [selectedBucketId, setSelectedBucketId] = useState<number | null>(null); 
   const navigate = useNavigate();
-  
-  const bucketListRef = useRef<HTMLUListElement | null>(null); // Reference to the list container
+
+  const bucketListRef = useRef<HTMLUListElement | null>(null); 
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -35,7 +35,7 @@ const Buckets: React.FC = () => {
   const handleEdit = (id: number) => {
     const bucketToEdit = buckets.find((bucket) => bucket.id === id);
     if (bucketToEdit) {
-      navigate(`/edit-bucket/${id}`, { state: { bucket: bucketToEdit } }); // Pass bucket data to the edit page
+      navigate(`/edit-bucket/${id}`, { state: { bucket: bucketToEdit } }); 
     }
   };
 
@@ -63,13 +63,13 @@ const Buckets: React.FC = () => {
   };
 
   const handleSelect = (id: number) => {
-    setSelectedBucketId((prevId) => (prevId === id ? null : id)); // Toggle selection
+    setSelectedBucketId((prevId) => (prevId === id ? null : id)); 
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (bucketListRef.current && !bucketListRef.current.contains(event.target as Node)) {
-        setSelectedBucketId(null); // Unselect when clicking outside
+        setSelectedBucketId(null); 
       }
     };
 
@@ -94,7 +94,7 @@ const Buckets: React.FC = () => {
           <h2 className="text-3xl font-bold flex justify-center items-center">{bucket.name}</h2>
           <div className="flex flex-col space-y-2 mt-4">
             <div className="flex">
-              {/* Labels on the Left */}
+            
               <div className="w-1/2 flex flex-col space-y-4">
                 <span className="text-xl">Expenses</span>
                 <span className="text-xl">Remaining</span>
@@ -102,10 +102,10 @@ const Buckets: React.FC = () => {
                 <span className="text-xl">Deadline</span>
               </div>
 
-              {/* Vertical Divider */}
+             
               <div className="border-l-2 border-gray-300 mx-4"></div>
 
-              {/* Data on the Right */}
+          
               <div className="w-1/2 flex flex-col space-y-4 text-right">
                 <span className="text-xl">{bucket.max_amount || 'None'}</span>
                 <span className="text-xl">$ 450</span>
@@ -115,11 +115,11 @@ const Buckets: React.FC = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
+         
           {selectedBucketId === bucket.id && (
             <div
               className="absolute top-4 right-4 flex space-x-2"
-              onClick={(e) => e.stopPropagation()} // Prevent parent click event
+              onClick={(e) => e.stopPropagation()} 
             >
               <button
                 onClick={() => handleEdit(bucket.id)}

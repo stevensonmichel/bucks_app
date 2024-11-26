@@ -37,7 +37,7 @@ const Expenses: React.FC = () => {
   const handleEdit = (id: number) => {
     const expenseToEdit = expenses.find((expense) => expense.id === id);
     if (expenseToEdit) {
-      navigate(`/edit-expense/${id}`, { state: { expense: expenseToEdit } }); // Pass expense data
+      navigate(`/edit-expense/${id}`, { state: { expense: expenseToEdit } }); 
     }
   };
 
@@ -61,13 +61,13 @@ const Expenses: React.FC = () => {
   };
 
   const handleSelect = (id: number) => {
-    setSelectedExpenseId((prevId) => (prevId === id ? null : id)); // Toggle selection
+    setSelectedExpenseId((prevId) => (prevId === id ? null : id));
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (expenseListRef.current && !expenseListRef.current.contains(event.target as Node)) {
-        setSelectedExpenseId(null); // Unselect when clicking outside
+        setSelectedExpenseId(null); 
       }
     };
 
@@ -112,7 +112,7 @@ const Expenses: React.FC = () => {
                     <div className="flex space-x-2">
                       <button
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent row click
+                          e.stopPropagation(); 
                           handleEdit(expense.id);
                         }}
                         className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
@@ -121,7 +121,7 @@ const Expenses: React.FC = () => {
                       </button>
                       <button
                         onClick={(e) => {
-                          e.stopPropagation(); // Prevent row click
+                          e.stopPropagation(); 
                           handleDelete(expense.id);
                         }}
                         className="text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"

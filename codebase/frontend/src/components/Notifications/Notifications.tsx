@@ -3,18 +3,16 @@ import React, { useState, useEffect, useRef } from 'react';
 interface Notification {
   id: number;
   message: string;
-  type: 'expense' | 'bucket' | 'account' | 'other'; // Type of activity
+  type: 'expense' | 'bucket' | 'account' | 'other'; 
   date: Date;
 }
 
 const Notifications: React.FC = () => {
-  // State to manage notifications
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [selectedNotificationId, setSelectedNotificationId] = useState<number | null>(null); // Track selected notification
+  const [selectedNotificationId, setSelectedNotificationId] = useState<number | null>(null); 
 
-  const notificationListRef = useRef<HTMLUListElement | null>(null); // Reference to the list container
+  const notificationListRef = useRef<HTMLUListElement | null>(null); 
 
-  // Example data (this could come from an API or be dynamically added)
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     fetch('http://127.0.0.1:8000/api/notifications/', {
@@ -34,7 +32,6 @@ const Notifications: React.FC = () => {
   }, []);
 
 
-  // Handlers for Edit and Delete actions
   const handleEdit = (id: number) => {
     alert(`Edit notification with ID: ${id}`);
   };
@@ -58,16 +55,16 @@ const Notifications: React.FC = () => {
       .catch((error) => console.error('Error deleting notification:', error));
   };
 
-  // Handle item selection
+
   const handleSelect = (id: number) => {
-    setSelectedNotificationId((prevId) => (prevId === id ? null : id)); // Toggle selection
+    setSelectedNotificationId((prevId) => (prevId === id ? null : id)); 
   };
 
-  // Effect to detect clicks outside of the notifications list
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationListRef.current && !notificationListRef.current.contains(event.target as Node)) {
-        setSelectedNotificationId(null); // Unselect when clicking outside
+        setSelectedNotificationId(null); 
       }
     };
 
@@ -80,7 +77,6 @@ const Notifications: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto p-8 bg-gray-400 shadow-md rounded-lg">
 
-      {/* If there are no notifications */}
       {notifications.length === 0 ? (
         <p className="text-gray-600">No notifications available.</p>
       ) : (
@@ -95,7 +91,6 @@ const Notifications: React.FC = () => {
             >
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-4">
-                  {/* Display type at the beginning */}
                   <span
                     className={`text-lg px-2 py-1 rounded-full ${
                       notification.type === 'expense'
@@ -116,17 +111,17 @@ const Notifications: React.FC = () => {
                 </div>
               </div>
 
-              {/* Action buttons (only visible on hover and when selected) */}
+        
               {selectedNotificationId === notification.id && (
                 <div
                   className="absolute top-4 right-4 flex space-x-2"
-                  onClick={(e) => e.stopPropagation()} // Prevent parent click event
+                  onClick={(e) => e.stopPropagation()} 
                 >
                   <button
                     onClick={() => handleEdit(notification.id)}
                     className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
                   >
-                    Edit
+                    Read/Unread
                   </button>
                   <button
                     onClick={() => handleDelete(notification.id)}

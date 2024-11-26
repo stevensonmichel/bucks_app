@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { usePlaidLink } from 'react-plaid-link';
 import axios from 'axios';
-import { error } from 'console';
 
 interface BankAccount {
   id: number;
@@ -17,7 +16,7 @@ const Accounts: React.FC = () => {
   const [selectedAccountId, setSelectedAccountId] = useState<number | null>(null); // Track selected account
   const navigate = useNavigate();
 
-  // Fetch connected bank accounts
+
   useEffect(() => {
     const fetchBankAccounts = async () => {
       try {
@@ -50,7 +49,7 @@ const Accounts: React.FC = () => {
     fetchBankAccounts();
   }, []);
 
-  // Function to handle connecting to the bank (fetch link token and open Plaid)
+
   const handleConnectBank = useCallback(async () => {
     try {
       const token = localStorage.getItem('access_token');
@@ -78,7 +77,7 @@ const Accounts: React.FC = () => {
     }
   }, []);
 
-  // Plaid Link Setup (only set up when linkToken is available)
+
   const { open, ready } = usePlaidLink({
     token: linkToken ?? '',
     onSuccess: async (public_token, metadata) => {
@@ -117,7 +116,7 @@ const Accounts: React.FC = () => {
     }
   }, [linkToken, open]);
 
-  // Handle account selection
+ 
   const handleSelectAccount = (id: number) => {
     setSelectedAccountId((prevId) => (prevId === id ? null : id)); // Toggle selection
   };
@@ -129,7 +128,7 @@ const Accounts: React.FC = () => {
     }
   };
 
-  // Handle account deletion
+
   const handleDeleteAccount = (id: number) => {
     const confirmed = window.confirm('Are you sure you want to delete this account?');
     console.log("The id of the account is", id)
@@ -139,7 +138,7 @@ const Accounts: React.FC = () => {
     fetch(`http://127.0.0.1:8000/api/accounts/${id}/`, {
       method : 'DELETE',
       headers: {
-        Authentication: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
         }
       })
       .then((response) => {
@@ -191,25 +190,25 @@ const Accounts: React.FC = () => {
                 <td className="px-4 py-4 text-left relative">
                   {selectedAccountId === account.id && (
                     <div
-                      className="absolute top-4 right-4 flex space-x-2"
-                      onClick={(e) => e.stopPropagation()} // Prevent parent click event
+                      className="absolute top-1/2 right-4 transform -translate-y-1/2 flex space-x-2"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                    <button
-                      onClick={() => handleEdit(account.id)}
-                      className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
+                      <button
+                        onClick={() => handleEdit(account.id)}
+                        className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
                       >
-                      Edit
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent row click
-                        handleDeleteAccount(account.id);
-                      }}
-                      className="absolute top-0 right-0 mt-3 mr-3 text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                        Edit
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteAccount(account.id);
+                        }}
+                        className="text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   )}
                 </td>
               </tr>
@@ -217,8 +216,6 @@ const Accounts: React.FC = () => {
           </tbody>
         </table>
       )}
-
-      
     </div>
   );
 };

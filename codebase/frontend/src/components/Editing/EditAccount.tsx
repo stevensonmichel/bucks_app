@@ -9,18 +9,14 @@ interface BankAccount {
 }
 
 const EditAccount: React.FC = () => {
-    
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Retrieve the account data passed via state
     const account = location.state?.account;
     const [name, setName] = useState<string>(account.name || "");
     if (!account) {
         return <p className="text-red-500 text-center">Account data not found.</p>;
     }
-
-    
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,19 +58,16 @@ const EditAccount: React.FC = () => {
     <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full max-w-md mx-auto mt-6">
       <h2 className="text-2xl font-bold text-center mb-4">Edit Account</h2>
       <form onSubmit={handleSubmit}>
-        {/* Display Account Type */}
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2">Type</label>
           <p className="w-full p-2 border border-gray-300 rounded-lg bg-gray-200">{account.type}</p>
         </div>
 
-        {/* Display Account Subtype */}
         <div className="mb-4">
           <label className="block text-gray-700 font-bold mb-2">Subtype</label>
           <p className="w-full p-2 border border-gray-300 rounded-lg bg-gray-200">{account.subtype}</p>
         </div>
 
-        {/* Edit Account Name */}
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
             Account Name
@@ -88,8 +81,7 @@ const EditAccount: React.FC = () => {
             required
           />
         </div>
-
-        {/* Action Buttons */}
+        
         <div className="flex space-x-8">
           <button
             type="submit"

@@ -21,7 +21,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
       <header className="flex justify-between items-center p-6 bg-white border-b">
         <div className="flex items-center">
           <img src="/logo.png" alt="Buck$ Logo" className="h-8 w-8 mr-2" />
@@ -33,7 +32,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </nav>
       </header>
 
-      {/* Welcome Section */}
+  
       <section className="flex flex-col md:flex-row justify-between items-center bg-black text-white p-12">
       <div className="flex flex-col items-center justify-center text-center md:text-left">
         <h1 className="text-4xl font-bold mb-8">Welcome to BUCK$</h1>
@@ -46,7 +45,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </div>
       </div>
 
-        {/* Login Form */}
+ 
         <div className="bg-white text-black p-12 shadow-md w-full md:w-1/3 mt-8 md:mt-0">
           <h2 className="text-xl font-bold mb-4">Login</h2>
           <form onSubmit={handleSubmit}>
@@ -82,7 +81,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         </div>
       </section>
 
-      {/* Why Choose BUCK$ Section */}
       <section className="bg-blue-400 text-white p-12">
         <h2 className="text-4xl font-bold text-center mb-8">Why Choose BUCK$</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
