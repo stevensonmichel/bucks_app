@@ -15,6 +15,7 @@ import axios from 'axios';
 import TransactionsPage from './components/TransactionsPage/TransactionsPage';
 import DynamicRoute from './components/Addition/DynamicRoute';
 import Profile from './components/Profile/Profile';
+import Settings from './components/Settings/Settings';
 import EditBucket from './components/Editing/EditBucket';
 import EditExpense from './components/Editing/EditExpense';
 import EditAccount from './components/Editing/EditAccount';
@@ -93,7 +94,7 @@ const App: React.FC = () => {
                       <div className="flex-grow bg-gray-200 ml-[20%] mt-[4rem] p-4 overflow-auto h-screen">
                         <ActionButtons />
                         <Routes>
-                          <Route path="/overview" element={<TransactionsPage />} />
+                          <Route path="/overview" element={<Overview />} />
                           <Route path="/expenses" element={<Expenses />} />
                           <Route path="/accounts" element={<Accounts />} />
                           <Route path="/buckets" element={<Buckets />} />
@@ -101,6 +102,7 @@ const App: React.FC = () => {
                           <Route path="/addBucket" element={<DynamicRoute />} />
                           <Route path="/addExpense" element={<DynamicRoute />} />
                           <Route path="/profile" element={<Profile />} />
+                          <Route path="/settings" element={<Settings />} />
                           <Route path="/edit-bucket/:id" element={<EditBucket />} />
                           <Route path="/edit-expense/:id" element={<EditExpense />} />
                           <Route path="/edit-account/:id" element={<EditAccount />} />

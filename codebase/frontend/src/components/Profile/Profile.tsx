@@ -86,7 +86,7 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-200 max-w-md mx-auto mt-10 p-6 shadow-md rounded-lg">
+    <div className="bg-gray-400 max-w-md mx-auto mt-10 p-6 shadow-md rounded-lg">
       <h2 className="text-3xl font-semibold mb-6 text-center text-blue-500">Edit Profile</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex space-x-4">
