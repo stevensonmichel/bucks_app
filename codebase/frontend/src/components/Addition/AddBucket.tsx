@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 interface Bucket {
   name: string;
   description: string;
-  amount: number;
+  max_amount: number;
 }
 
 interface AddBucketProps {
@@ -14,14 +14,14 @@ interface AddBucketProps {
 const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [amount, setAmount] = useState<number | "">("");
+  const [max_amount, setAmount] = useState<number | "">("");
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description || amount === "") {
+    if (!name || !description || max_amount === "") {
       alert("Please fill in all fields");
       return;
     }
@@ -29,7 +29,7 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
     const newBucket: Bucket = {
       name,
       description,
-      amount: Number(amount),
+      max_amount: Number(max_amount),
     };
 
     try {
@@ -105,12 +105,12 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
             htmlFor="amount"
             className="block text-gray-700 font-bold mb-2"
           >
-            Amount ($)
+            Maximum Amount
           </label>
           <input
             type="number"
             id="amount"
-            value={amount}
+            value={max_amount}
             onChange={(e) =>
               setAmount(e.target.value !== "" ? Number(e.target.value) : "")
             }

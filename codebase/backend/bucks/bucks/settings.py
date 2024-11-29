@@ -15,16 +15,16 @@ from dotenv import load_dotenv
 from datetime import timedelta
 
 
-load_dotenv()  # Load the environment variables from .env
+load_dotenv()
 
 PLAID_CLIENT_ID = os.getenv('PLAID_CLIENT_ID')
 PLAID_SECRET = os.getenv('PLAID_SECRET')
-PLAID_ENV = os.getenv('PLAID_ENV', 'sandbox')  # Default to 'sandbox' if not set
+PLAID_ENV = os.getenv('PLAID_ENV', 'sandbox')  
 
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -39,8 +39,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
-# Application definition
 
 INSTALLED_APPS = [
     'buckets',
@@ -77,20 +75,17 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Essential for populating request.user
+    'django.contrib.auth.middleware.AuthenticationMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 
-
-
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React dev server
+    "http://localhost:3000", 
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True  # Use this for testing purposes; fine-tune for production
+CORS_ALLOW_ALL_ORIGINS = True  
 
 CORS_ALLOW_METHODS = [
     'GET',
@@ -100,6 +95,7 @@ CORS_ALLOW_METHODS = [
     'DELETE',
     'OPTIONS',
 ]
+
 CORS_ALLOW_HEADERS = [
     'Authorization',
     'Content-Type',
@@ -126,24 +122,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'bucks.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bucks',
         'USER': 'michels',
         'PASSWORD': 'michels',
-        'HOST': 'localhost',  # Set to 'localhost' or '127.0.0.1' if MySQL is on the same machine
-        'PORT': '3306',       # MySQL default port is 3306
+        'HOST': 'localhost',
+        'PORT': '3306',     
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -161,9 +150,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -173,31 +159,23 @@ USE_I18N = True
 USE_TZ = True
 
 
-
-
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),  # Set your desired lifetime
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Set your desired refresh lifetime
-    'ROTATE_REFRESH_TOKENS': True,                  # Automatically rotate refresh tokens
-    'BLACKLIST_AFTER_ROTATION': True,               # Blacklist old tokens
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120), 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),   
+    'ROTATE_REFRESH_TOKENS': True,                  
+    'BLACKLIST_AFTER_ROTATION': True,             
 }
 
 
-
-# Allow localhost:3000 as a trusted origin (for local development)
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
 ]
 
-# Ensure that localhost is also allowed in ALLOWED_HOSTS for development
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -6,6 +6,7 @@ from .serializers import UserSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -34,17 +35,17 @@ class UserUpdateView(APIView):
     permission_classes = [AllowAny]
 
     def put(self, request):
-        user = request.user  # Get the currently authenticated user
+        user = request.user 
         serializer = UserSerializer(user, data=request.data, partial=False)
         if serializer.is_valid():
-            serializer.save()  # Save the updated user details
+            serializer.save()
             return Response({"message": "Profile updated successfully.", "data": serializer.data})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request):
-        user = request.user  # Get the currently authenticated user
+        user = request.user
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()  # Save the updated user details
+            serializer.save() 
             return Response({"message": "Profile updated successfully.", "data": serializer.data})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

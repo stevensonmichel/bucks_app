@@ -8,4 +8,4 @@ from .models import Bucket
 class BucketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bucket
-        fields = ['id', 'name', 'description', 'max_amount'] 
+        fields = ['id', 'name', 'description', 'max_amount', 'current_amount', 'remaining_amount'] 

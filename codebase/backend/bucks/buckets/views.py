@@ -9,6 +9,7 @@ from rest_framework import generics
 from notifications.models import Notification
 from django.utils import timezone
 
+
 class BucketListView(APIView):
     def get(self, request):
         buckets = Bucket.objects.filter(user=request.user)
@@ -50,7 +51,6 @@ class BucketAddView(generics.CreateAPIView):
                 status=status.HTTP_201_CREATED
             )
         except Exception as e:
-            # Handle any potential errors
             print("Error creating bucket:", str(e))
             return Response(
                 {"error": "Failed to add bucket", "details": str(e)},
@@ -88,7 +88,7 @@ class BucketDetailView(APIView):
         if bucket is None:
             return Response({"error": "Bucket not found."}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = BucketSerializer(bucket, data=request.data, partial=True)  # Partial update
+        serializer = BucketSerializer(bucket, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

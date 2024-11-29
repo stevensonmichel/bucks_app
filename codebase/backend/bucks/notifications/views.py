@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.views import APIView
 
+
 class NotificationListView(generics.ListCreateAPIView):
     def get(self, request):
         notifications = Notification.objects.filter(user=request.user)

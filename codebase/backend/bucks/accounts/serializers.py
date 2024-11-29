@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Account  # Import your Account model
+from .models import Account  
+
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:

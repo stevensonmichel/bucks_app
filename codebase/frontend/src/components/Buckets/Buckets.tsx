@@ -5,6 +5,10 @@ interface Bucket {
   id: number;
   name: string;
   max_amount: number;
+  current_amount: number;
+  remaining_amount: number;
+  is_active: boolean;
+
 }
 
 const Buckets: React.FC = () => {
@@ -95,9 +99,10 @@ const Buckets: React.FC = () => {
             <div className="flex">
             
               <div className="w-1/2 flex flex-col space-y-4">
-                <span className="text-xl">Expenses</span>
+                <span className="text-xl">Maximum</span>
+                <span className="text-xl">Current</span>
                 <span className="text-xl">Remaining</span>
-                <span className="text-xl">Tracks</span>
+                <span className="text-xl">Status</span>
               </div>
 
              
@@ -106,7 +111,8 @@ const Buckets: React.FC = () => {
           
               <div className="w-1/2 flex flex-col space-y-4 text-right">
                 <span className="text-xl">{bucket.max_amount || 'None'}</span>
-                <span className="text-xl">$ 450</span>
+                <span className="text-xl">{bucket.current_amount || 'None'}</span>
+                <span className="text-xl">{bucket.remaining_amount || 'None'}</span>
                 <span className="text-xl">OK</span>
               </div>
             </div>

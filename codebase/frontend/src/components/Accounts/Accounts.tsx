@@ -10,6 +10,7 @@ interface BankAccount {
   subtype?: string;
 }
 
+
 const Accounts: React.FC = () => {
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
   const [linkToken, setLinkToken] = useState<string | null>(null);
@@ -118,7 +119,7 @@ const Accounts: React.FC = () => {
 
  
   const handleSelectAccount = (id: number) => {
-    setSelectedAccountId((prevId) => (prevId === id ? null : id)); // Toggle selection
+    setSelectedAccountId((prevId) => (prevId === id ? null : id));
   };
 
   const handleEdit = (id: number) => {

@@ -13,7 +13,6 @@ class AccountListView(generics.ListCreateAPIView):
     
     
 class AccountDetailView(APIView):
-    
     permission_classes = [IsAuthenticated]
     def get_object(self, pk):
         print("Received pk is", pk)
