@@ -186,7 +186,8 @@ const Overview: React.FC = () => {
             <p className="text-center text-red-500">You have not set a budget yet. Please do so</p>
         ) : (
             budgetDetails && (
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg shadow-md">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-8 rounded-lg shadow-md">
+                <br></br>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                 <div className="flex flex-col items-center">
                     <h3 className="text-sm font-medium text-gray-600">Name</h3>
@@ -197,6 +198,7 @@ const Overview: React.FC = () => {
                     <p className="text-lg font-semibold text-gray-800">${budgetDetails.amount.toLocaleString()}</p>
                 </div>
                 </div>
+                <br></br>
                 <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col items-center">
                     <h3 className="text-sm font-medium text-gray-600">Start Date</h3>
@@ -207,9 +209,12 @@ const Overview: React.FC = () => {
                     <p className="text-lg font-semibold text-gray-800">{new Date(budgetDetails.end_date).toLocaleDateString()}</p>
                 </div>
                 </div>
+                <br></br>
+                <br></br>
                 <div className="mt-4 text-center">
                 <p className="text-sm text-gray-500">Ensure you stay within your budget to achieve your financial goals!</p>
                 </div>
+                <br></br>
             </div>
             )
         )}

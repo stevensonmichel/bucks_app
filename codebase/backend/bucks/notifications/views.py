@@ -7,7 +7,6 @@ from rest_framework.views import APIView
 class NotificationListView(generics.ListCreateAPIView):
     def get(self, request):
         notifications = Notification.objects.filter(user=request.user)
-        print("from Notifications, the user is", request.user, request.user.id)
         
         serializer = NotificationSerializer(notifications, many=True)
         
@@ -56,3 +55,14 @@ class NotificationDetailView(APIView):
             return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
         notification.delete()
         return Response({"message": "Notification deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+    
+
+class MarkAsReadView(APIView):
+    def post(self, request, pk, *args, **kwargs):
+        try:
+            notification = Notification.objects.get(pk=pk, user=request.user)
+            notification.read = True
+            notification.save()
+            return Response({"message": "Notification marked as read."}, status=status.HTTP_200_OK)
+        except Notification.DoesNotExist:
+            return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
