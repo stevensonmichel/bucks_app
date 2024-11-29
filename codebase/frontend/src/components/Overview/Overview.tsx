@@ -10,11 +10,13 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
+import { Navigate, useActionData, useNavigate } from 'react-router-dom';
 
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, ArcElement);
 
 const Overview: React.FC = () => {
   // Data for the Expense Graph (Line Chart)
+  const navigate = useNavigate();
   const expenseGraphData = {
     labels: Array.from({ length: 31 }, (_, i) => `Jan ${i + 1}`), // Days of January
     datasets: [
@@ -85,7 +87,7 @@ const Overview: React.FC = () => {
 
       {/* Buttons */}
       <div className="flex space-x-4 mb-6">
-        <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">
+        <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600" onClick={() => navigate('/setBudget')}>
           Set Budget
         </button>
         <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">

@@ -7,6 +7,7 @@ interface Expense {
   description: string;
   amount: number;
   bucket: string;
+  bucket_name: string;
   date: string;
 }
 
@@ -105,7 +106,7 @@ const Expenses: React.FC = () => {
                 <td className="px-4 py-4 text-left">{i + 1}</td>
                 <td className="px-4 py-4 text-left">{expense.name || expense.description}</td>
                 <td className="px-4 py-4 text-left">${expense.amount}</td>
-                <td className="px-4 py-4 text-left">{expense.bucket}</td>
+                <td className="px-4 py-4 text-left">{expense.bucket_name}</td>
                 <td className="px-4 py-4 text-left">{expense.date}</td>
                 <td className="px-4 py-4 text-left">
                   {selectedExpenseId === expense.id && (

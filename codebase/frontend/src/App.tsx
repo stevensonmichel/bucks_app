@@ -19,6 +19,7 @@ import Settings from './components/Settings/Settings';
 import EditBucket from './components/Editing/EditBucket';
 import EditExpense from './components/Editing/EditExpense';
 import EditAccount from './components/Editing/EditAccount';
+import SetBudget from './components/Budget/Budget';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -103,6 +104,7 @@ const App: React.FC = () => {
                           <Route path="/addExpense" element={<DynamicRoute />} />
                           <Route path="/profile" element={<Profile />} />
                           <Route path="/settings" element={<Settings />} />
+                          <Route path="/setBudget" element={<SetBudget />} />
                           <Route path="/edit-bucket/:id" element={<EditBucket />} />
                           <Route path="/edit-expense/:id" element={<EditExpense />} />
                           <Route path="/edit-account/:id" element={<EditAccount />} />
