@@ -10,13 +10,12 @@ const EditBucket: React.FC<EditBucketProps> = () => {
   const bucket = location.state?.bucket; // Access passed bucket data
   const [name, setName] = useState<string>(bucket?.name || "");
   const [description, setDescription] = useState<string>(bucket?.description || "");
-  const [deadline, setDeadline] = useState<string>(bucket?.deadline || "");
   const [amount, setAmount] = useState<number | "">(bucket?.max_amount || "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description || !deadline || amount === "") {
+    if (!name || !description || amount === "") {
       alert("Please fill in all fields");
       return;
     }
@@ -25,7 +24,6 @@ const EditBucket: React.FC<EditBucketProps> = () => {
       id: bucket.id,
       name,
       description,
-      deadline,
       max_amount: Number(amount),
     };
 
@@ -81,20 +79,6 @@ const EditBucket: React.FC<EditBucketProps> = () => {
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="deadline" className="block text-gray-700 font-bold mb-2">
-            Deadline (MM/DD/YYYY)
-          </label>
-          <input
-            type="date"
-            id="deadline"
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />

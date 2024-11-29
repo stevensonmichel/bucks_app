@@ -5,7 +5,6 @@ interface Bucket {
   id: number;
   name: string;
   max_amount: number;
-  deadline: string;
 }
 
 const Buckets: React.FC = () => {
@@ -99,7 +98,6 @@ const Buckets: React.FC = () => {
                 <span className="text-xl">Expenses</span>
                 <span className="text-xl">Remaining</span>
                 <span className="text-xl">Tracks</span>
-                <span className="text-xl">Deadline</span>
               </div>
 
              
@@ -110,7 +108,6 @@ const Buckets: React.FC = () => {
                 <span className="text-xl">{bucket.max_amount || 'None'}</span>
                 <span className="text-xl">$ 450</span>
                 <span className="text-xl">OK</span>
-                <span className="text-xl block whitespace-nowrap overflow-hidden">{bucket.deadline}</span>
               </div>
             </div>
           </div>

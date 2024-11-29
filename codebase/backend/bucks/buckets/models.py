@@ -16,7 +16,6 @@ class Bucket(models.Model):
     name = models.CharField(max_length=255)  # Name of the bucket
     description = models.TextField(blank=True, null=True)  # Optional description
     max_amount = models.DecimalField(max_digits=10, decimal_places=2, null=True)  # Max budget amount
-    deadline = models.DateField(null=True, blank=True)  # Deadline for spending in the bucket
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when the bucket was created
 
     def __str__(self):

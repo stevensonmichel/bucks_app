@@ -28,9 +28,9 @@ const predefinedCategories: Bucket[] = [
 
 const SetBudget: React.FC = () => {
   const [buckets, setBuckets] = useState<Bucket[]>([]);
-  const [selectedBuckets, setSelectedBuckets] = useState<string[]>([]);
+  const [selected_buckets, setSelectedBuckets] = useState<string[]>([]);
   const [budgetName, setBudgetName] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>("");
+  const [start_date, setStartDate] = useState<string>("");
   const [amount, setAmount] = useState<number | "">("");
 
   const navigate = useNavigate();
@@ -58,22 +58,22 @@ const SetBudget: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (!budgetName || !startDate || !amount || selectedBuckets.length === 0) {
+    if (!budgetName || !start_date || !amount || selected_buckets.length === 0) {
       alert("Please fill in all required fields.");
       return;
     }
 
     // Automatically calculate end date
-    const start = new Date(startDate);
+    const start = new Date(start_date);
     const end = new Date(start);
     end.setMonth(start.getMonth() + 1);
 
     const budgetData = {
       name: budgetName,
-      startDate,
-      endDate: end.toISOString().split("T")[0], // Format YYYY-MM-DD
+      start_date,
+      end_date: end.toISOString().split("T")[0], // Format YYYY-MM-DD
       amount: Number(amount),
-      selectedBuckets,
+      selected_buckets,
     };
 
     console.log("Saving budget:", budgetData);
@@ -123,7 +123,7 @@ const SetBudget: React.FC = () => {
         <input
           type="date"
           id="startDate"
-          value={startDate}
+          value={start_date}
           onChange={(e) => setStartDate(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
@@ -149,7 +149,7 @@ const SetBudget: React.FC = () => {
       <div className="mb-4">
         <label className="block text-gray-700 font-bold mb-2">Select Buckets</label>
         <div className="flex flex-wrap gap-2">
-          {[...buckets, ...predefinedCategories].map((bucket) => (
+          {[...buckets].map((bucket) => (
             <label
               key={bucket.id}
               className="flex items-center space-x-2 bg-gray-200 p-2 rounded-lg cursor-pointer hover:bg-gray-300"
@@ -157,7 +157,7 @@ const SetBudget: React.FC = () => {
               <input
                 type="checkbox"
                 value={bucket.id}
-                checked={selectedBuckets.includes(bucket.id)}
+                checked={selected_buckets.includes(bucket.id)}
                 onChange={() => handleBucketSelection(bucket.id)}
                 className="w-4 h-4"
               />

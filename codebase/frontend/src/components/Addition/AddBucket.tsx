@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 interface Bucket {
   name: string;
   description: string;
-  deadline: string;
   amount: number;
 }
 
@@ -15,7 +14,6 @@ interface AddBucketProps {
 const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [deadline, setStopDate] = useState<string>("");
   const [amount, setAmount] = useState<number | "">("");
 
   const navigate = useNavigate();
@@ -23,7 +21,7 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description || !deadline || amount === "") {
+    if (!name || !description || amount === "") {
       alert("Please fill in all fields");
       return;
     }
@@ -31,7 +29,6 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
     const newBucket: Bucket = {
       name,
       description,
-      deadline,
       amount: Number(amount),
     };
 
@@ -51,7 +48,6 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
       if (response.ok) {
         setName("");
         setDescription("");
-        setStopDate("");
         setAmount("");
 
         if (onAddBucket) {
@@ -99,23 +95,6 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="stopDate"
-            className="block text-gray-700 font-bold mb-2"
-          >
-            Deadline (MM/DD/YYYY)
-          </label>
-          <input
-            type="date"
-            id="stopDate"
-            value={deadline}
-            onChange={(e) => setStopDate(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
