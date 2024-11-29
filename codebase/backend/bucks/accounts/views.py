@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 
 class AccountListView(generics.ListCreateAPIView):
     def get(self, request):
-        accounts = Account.objects.all()
+        accounts = Account.objects.filter(user=request.user)
         serializer = AccountSerializer(accounts, many=True)
         return Response(serializer.data)
     

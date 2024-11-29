@@ -163,58 +163,60 @@ const Accounts: React.FC = () => {
       {bankAccounts.length === 0 ? (
         <p className="text-gray-600">No bank accounts connected.</p>
       ) : (
-        <table className="min-w-full table-auto bg-gray-100 shadow-md rounded-lg">
-          <thead className="bg-cyan-400 text-white">
-            <tr>
-              <th className="px-4 py-4 text-left">No</th>
-              <th className="px-4 py-4 text-left">Account Name</th>
-              <th className="px-4 py-4 text-left">Type</th>
-              <th className="px-4 py-4 text-left">Subtype</th>
-              <th className="px-4 py-4 text-left">Actions</th>
+        <div className="overflow-hidden rounded-lg shadow-5xl">
+          <table className="min-w-full table-auto bg-gray-100 shadow-md">
+            <thead className="bg-cyan-400 text-white">
+              <tr>
+                <th className="px-4 py-4 text-left">No</th>
+                <th className="px-4 py-4 text-left">Account Name</th>
+                <th className="px-4 py-4 text-left">Type</th>
+                <th className="px-4 py-4 text-left">Subtype</th>
+                <th className="px-4 py-4 text-left">Actions</th>
 
-            </tr>
-          </thead>
-          <tbody>
-            {bankAccounts.map((account, i) => (
-              <tr
-                key={account.id}
-                className={`border-b cursor-pointer ${
-                  selectedAccountId === account.id ? 'bg-blue-200' : 'bg-white hover:bg-gray-200'
-                }`}
-                onClick={() => handleSelectAccount(account.id)}
-              >
-                <td className="px-4 py-4 text-left">{i + 1}</td>
-                <td className="px-4 py-4 text-left">{account.name}</td>
-                <td className="px-4 py-4 text-left">{account.type}</td>
-                <td className="px-4 py-4 text-left">{account.subtype}</td>
-                <td className="px-4 py-4 text-left relative">
-                  {selectedAccountId === account.id && (
-                    <div
-                      className="absolute top-1/2 right-4 transform -translate-y-1/2 flex space-x-2"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <button
-                        onClick={() => handleEdit(account.id)}
-                        className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteAccount(account.id);
-                        }}
-                        className="text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {bankAccounts.map((account, i) => (
+                <tr
+                  key={account.id}
+                  className={`border-b cursor-pointer ${
+                    selectedAccountId === account.id ? 'bg-blue-200' : 'bg-white hover:bg-gray-200'
+                  }`}
+                  onClick={() => handleSelectAccount(account.id)}
+                >
+                  <td className="px-4 py-4 text-left">{i + 1}</td>
+                  <td className="px-4 py-4 text-left">{account.name}</td>
+                  <td className="px-4 py-4 text-left">{account.type}</td>
+                  <td className="px-4 py-4 text-left">{account.subtype}</td>
+                  <td className="px-4 py-4 text-left relative">
+                    {selectedAccountId === account.id && (
+                      <div
+                        className="absolute top-1/2 right-4 transform -translate-y-1/2 flex space-x-2"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <button
+                          onClick={() => handleEdit(account.id)}
+                          className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteAccount(account.id);
+                          }}
+                          className="text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

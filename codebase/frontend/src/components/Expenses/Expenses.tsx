@@ -79,63 +79,69 @@ const Expenses: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-gray-400 shadow-md rounded-lg">
+    <div className="max-w-5xl mx-auto p-10 bg-gray-400 shadow-md rounded-lg">
       {expenses.length === 0 ? (
         <p className="text-gray-600">No expenses found.</p>
       ) : (
-        <table className="min-w-full table-auto bg-gray-100 shadow-md rounded-lg" ref={expenseListRef}>
+        <div className="overflow-hidden rounded-lg shadow-md">
+          <table className="min-w-full table-fixed bg-gray-100 shadow-md rounded-lg" ref={expenseListRef}>
           <thead className="bg-cyan-400 text-white">
             <tr>
-              <th className="px-4 py-4 text-left">No</th>
-              <th className="px-4 py-4 text-left">Name</th>
-              <th className="px-4 py-4 text-left">Amount</th>
-              <th className="px-4 py-4 text-left">Bucket</th>
-              <th className="px-4 py-4 text-left">Date</th>
-              <th className="px-4 py-4 text-left">Actions</th>
+              <th className="px-4 py-4 text-left w-12">No</th>
+              <th className="px-4 py-4 text-left w-48">Name</th>
+              <th className="px-4 py-4 text-left w-32">Amount</th>
+              <th className="px-4 py-4 text-left w-48">Bucket</th>
+              <th className="px-4 py-4 text-left w-32">Date</th>
+              <th className="px-4 py-4 text-left w-48">Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {expenses.map((expense, i) => (
-              <tr
-                key={expense.id}
-                className={`border-b transition-colors cursor-pointer ${
-                  selectedExpenseId === expense.id ? 'bg-blue-200' : 'bg-white hover:bg-gray-200'
-                }`}
-                onClick={() => handleSelect(expense.id)}
-              >
-                <td className="px-4 py-4 text-left">{i + 1}</td>
-                <td className="px-4 py-4 text-left">{expense.name || expense.description}</td>
-                <td className="px-4 py-4 text-left">${expense.amount}</td>
-                <td className="px-4 py-4 text-left">{expense.bucket_name}</td>
-                <td className="px-4 py-4 text-left">{expense.date}</td>
-                <td className="px-4 py-4 text-left">
-                  {selectedExpenseId === expense.id && (
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); 
-                          handleEdit(expense.id);
-                        }}
-                        className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); 
-                          handleDelete(expense.id);
-                        }}
-                        className="text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"
-                      >
-                        Delete
-                      </button>
+            <tbody>
+              {expenses.map((expense, i) => (
+                <tr
+                  key={expense.id}
+                  className={`border-b transition-colors cursor-pointer ${
+                    selectedExpenseId === expense.id ? 'bg-blue-200' : 'bg-white hover:bg-gray-200'
+                  }`}
+                  onClick={() => handleSelect(expense.id)}
+                >
+                  <td className="px-4 py-4 text-left">{i + 1}</td>
+                  <td className="px-4 py-4 text-left">{expense.name || expense.description}</td>
+                  <td className="px-4 py-4 text-left">${expense.amount}</td>
+                  <td className="px-4 py-4 text-left">{expense.bucket_name}</td>
+                  <td className="px-4 py-4 text-left">{expense.date}</td>
+                  <td className="px-4 py-4 text-left">
+                    <div className="flex space-x-2 h-8">
+                      {selectedExpenseId === expense.id ? (
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEdit(expense.id);
+                            }}
+                            className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(expense.id);
+                            }}
+                            className="text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      ) : (
+                        <span className="invisible">Buttons</span> // Invisible placeholder
+                      )}
                     </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

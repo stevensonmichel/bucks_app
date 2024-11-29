@@ -25,5 +25,12 @@ class BudgetListCreateView(generics.ListCreateAPIView):
 
 
 class BudgetDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Budget.objects.all()
+    """
+    Handles retrieving, updating, and deleting a specific budget
+    belonging to the authenticated user.
+    """
     serializer_class = BudgetSerializer
+
+    def get_queryset(self):
+        # Filter budgets to only include those owned by the authenticated user
+        return Budget.objects.filter(user=self.request.user)

@@ -165,13 +165,13 @@ const Overview: React.FC = () => {
             className="bg-blue-500 h-6 rounded-md text-white text-sm flex items-center justify-center"
             style={{ width: `${progressPercentage}%` }}
             >
-            {budgetDetails?.amount ? `${progressPercentage.toFixed(1)}%` : 'Loading...'}
+            {budgetDetails?.amount ? `${progressPercentage.toFixed(1)}%` : 'No budget...'}
             </div>
         </div>
         <div className="flex justify-between mt-2">
             <span className="text-sm text-gray-700">Monthly: ${monthlyExpenses}</span>
             <span className="text-sm text-gray-700">
-            Total: ${budgetDetails?.amount ? budgetDetails.amount.toLocaleString() : 'Loading...'}
+            Total: ${budgetDetails?.amount ? budgetDetails.amount.toLocaleString() : 'No budget...'}
             </span>
         </div>
         </div>
@@ -183,7 +183,7 @@ const Overview: React.FC = () => {
         {loading ? (
             <p className="text-center text-gray-500">Loading...</p>
         ) : error ? (
-            <p className="text-center text-red-500">{error}</p>
+            <p className="text-center text-red-500">You have not set a budget yet. Please do so</p>
         ) : (
             budgetDetails && (
             <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg shadow-md">

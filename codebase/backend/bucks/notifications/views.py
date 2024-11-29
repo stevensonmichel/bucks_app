@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 class NotificationListView(generics.ListCreateAPIView):
     def get(self, request):
-        notifications = Notification.objects.all()
+        notifications = Notification.objects.filter(user=request.user)
         print("from Notifications, the user is", request.user, request.user.id)
         
         serializer = NotificationSerializer(notifications, many=True)

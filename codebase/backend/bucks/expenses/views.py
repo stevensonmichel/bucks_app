@@ -9,7 +9,7 @@ from notifications.models import Notification
 class ExpenseListView(generics.ListCreateAPIView):
     def get(self, request):
         # Query the database for all Bucket instances
-        expenses = Expense.objects.all()
+        expenses = Expense.objects.filter(user=request.user)
         print("From Expenses, the user is", request.user, request.user.id)
         
 

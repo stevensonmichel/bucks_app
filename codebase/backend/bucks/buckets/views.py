@@ -11,7 +11,7 @@ from django.utils import timezone
 
 class BucketListView(APIView):
     def get(self, request):
-        buckets = Bucket.objects.all()
+        buckets = Bucket.objects.filter(user=request.user)
         serializer = BucketSerializer(buckets, many=True)
         return Response(serializer.data)
     
