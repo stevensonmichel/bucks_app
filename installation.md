@@ -25,6 +25,7 @@ Before you begin, ensure you have the following installed:
 2. Set up a virtual environment: 
 
     ``` python -m venv yourvirtualenvironment ```
+
     ``` source yourvirtualenvironment/bin/activate ```
 
 
@@ -58,14 +59,23 @@ Before you begin, ensure you have the following installed:
 5. Update the DATABASES section in ``` backend/bucks/settings.py ``` with your database credentials.
 
     ``` DATABASES = { ```
-        ``` 'default': { ``` 
-            ``` 'ENGINE': 'django.db.backends.mysql', ```
-            ``` 'NAME': 'project_db', ```
-            ``` 'USER': 'project_user', ```
-            ``` 'PASSWORD': 'password', ```
-            ``` 'HOST': 'localhost', ```
-            ``` 'PORT': '3306', ```
-        ``` } ```
+
+    ``` 'default': { ``` 
+
+    ``` 'ENGINE': 'django.db.backends.mysql', ```
+
+    ``` 'NAME': 'project_db', ```
+
+    ``` 'USER': 'project_user', ```
+
+    ``` 'PASSWORD': 'password', ```
+
+    ``` 'HOST': 'localhost', ```
+
+    ``` 'PORT': '3306', ```
+
+    ``` } ```
+
     ``` } ```
 
 
@@ -95,7 +105,9 @@ Before you begin, ensure you have the following installed:
     ``` npm install ```
 
 
-3. Start the development server with: npm start
+3. Start the development server with: 
+
+    ``` npm start ```
 
 
 
