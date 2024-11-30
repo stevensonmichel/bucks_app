@@ -110,7 +110,7 @@ const Settings: React.FC = () => {
           <div>
             <h3 className="font-medium text-gray-700">Credits:</h3>
             <p className="text-gray-600">
-              Developed by <span className="font-semibold">Your Team Name</span>
+              Developed by <span className="font-semibold">Stevenson Michel</span>
             </p>
           </div>
         </div>

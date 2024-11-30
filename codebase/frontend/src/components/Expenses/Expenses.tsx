@@ -85,7 +85,7 @@ const Expenses: React.FC = () => {
       ) : (
         <div className="overflow-hidden rounded-lg shadow-md">
           <table className="min-w-full table-fixed bg-gray-100 shadow-md rounded-lg" ref={expenseListRef}>
-          <thead className="bg-cyan-400 text-white">
+          <thead className="bg-blue-400 text-white">
             <tr>
               <th className="px-4 py-4 text-left w-12">No</th>
               <th className="px-4 py-4 text-left w-48">Name</th>

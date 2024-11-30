@@ -8,6 +8,7 @@ interface Bucket {
   current_amount: number;
   remaining_amount: number;
   is_active: boolean;
+  status: string;
 
 }
 
@@ -89,8 +90,8 @@ const Buckets: React.FC = () => {
           key={bucket.id}
           className={`border-8 p-10 rounded-lg relative transition-colors cursor-pointer ${
             selectedBucketId === bucket.id
-              ? 'bg-blue-200 border-cyan-600'
-              : 'bg-white border-cyan-500 hover:bg-gray-200'
+              ? 'bg-blue-200 border-blue-600'
+              : 'bg-white border-blue-500 hover:bg-gray-200'
           }`}
           onClick={() => handleSelect(bucket.id)}
         >
@@ -113,7 +114,7 @@ const Buckets: React.FC = () => {
                 <span className="text-xl">{bucket.max_amount || 'None'}</span>
                 <span className="text-xl">{bucket.current_amount || 'None'}</span>
                 <span className="text-xl">{bucket.remaining_amount || 'None'}</span>
-                <span className="text-xl">OK</span>
+                <span className="text-xl">{bucket.status || 'None'}</span>
               </div>
             </div>
           </div>

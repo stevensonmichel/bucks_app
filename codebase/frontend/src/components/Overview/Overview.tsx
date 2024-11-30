@@ -53,23 +53,40 @@ const Overview: React.FC = () => {
     fetchBudgetDetails();
   }, []);
 
-  const expenseGraphData = {
-    labels: Array.from({ length: 31 }, (_, i) => `Jan ${i + 1}`),
-    datasets: [
-      {
-        label: 'Expenses ($)',
-        data: [
-          200, 250, 300, 220, 280, 310, 330, 290, 320, 340, 360, 370, 380, 390,
-          410, 430, 450, 470, 490, 510, 530, 550, 580, 600, 620, 640, 660, 670,
-          680, 690, 700,
-        ],
-        fill: true,
-        borderColor: '#36A2EB',
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        tension: 0.5,
-      },
-    ],
+    const generateDateLabels = (startDate: string, endDate: string): string[] => {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const labels = [];
+
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric', 
+      year: 'numeric', 
+    });
+
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      labels.push(formatter.format(d)); 
+    }
+
+    return labels;
   };
+    
+    const dateLabels = generateDateLabels(budgetDetails.start_date, budgetDetails.end_date);
+  
+    const expenseGraphData = {
+      labels: dateLabels, // Dynamically generated labels
+      datasets: [
+        {
+          label: 'Expenses ($)',
+          data: Array(dateLabels.length).fill(500), // Example: Fill with dummy data
+          fill: true,
+          borderColor: '#36A2EB',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          tension: 0.5,
+        },
+      ],
+    };
+
 
   const expenseGraphOptions = {
     responsive: true,
@@ -100,22 +117,40 @@ const Overview: React.FC = () => {
       },
     },
   };
+  
+  const labelInfo: string[] = budgetDetails?.buckets?.map((bucket: any) => bucket.name) || [];
+  const labelData: number[] = budgetDetails?.buckets?.map((bucket: any) => bucket.current_amount) || [];
+
+  const generateColors = (numColors: number): string[] => {
+    const colors: string[] = [
+      '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40',
+      '#B4A7D6', '#76D7C4', '#F7DC6F', '#DC7633', '#E74C3C', '#5DADE2',
+      '#45B39D', '#F4D03F', '#AF7AC5', '#F0B27A', '#58D68D', '#85C1E9',
+      '#E59866', '#AAB7B8',
+    ];
+    // Repeat colors if there are more buckets than colors
+    return Array.from({ length: numColors }, (_, i) => colors[i % colors.length]);
+  };
+
+  // Dynamically generate colors to match the number of labels
+  const backgroundColors: string[] = generateColors(labelInfo.length);
 
   const bucketsBreakdownData = {
-    labels: ['Transportation', 'Groceries', 'Entertainment', 'Savings'],
+    labels: labelInfo, // Array of bucket names
     datasets: [
       {
-        data: [30, 20, 25, 25],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+        data: labelData, // Array of bucket data
+        backgroundColor: backgroundColors,
+        hoverBackgroundColor: backgroundColors,
       },
     ],
   };
-  const totalExpenses = 20000;
-  const monthlyExpenses = 7000;
+
+
+  const totalExpenses = budgetDetails?.total_expenses || 0;
   const progressPercentage = budgetDetails?.amount
-  ? (monthlyExpenses / budgetDetails.amount) * 100
-  : 0; 
+    ? (totalExpenses / budgetDetails.amount) * 100
+    : 0;
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -161,18 +196,18 @@ const Overview: React.FC = () => {
         <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4 text-center">Expenses Progress</h2>
         <div className="w-full bg-gray-300 rounded-md h-6">
-            <div
+          <div
             className="bg-blue-500 h-6 rounded-md text-white text-sm flex items-center justify-center"
             style={{ width: `${progressPercentage}%` }}
-            >
-            {budgetDetails?.amount ? `${progressPercentage.toFixed(1)}%` : 'No budget...'}
-            </div>
+          >
+            {progressPercentage.toFixed(1)}%
+          </div>
         </div>
         <div className="flex justify-between mt-2">
-            <span className="text-sm text-gray-700">Monthly: ${monthlyExpenses}</span>
-            <span className="text-sm text-gray-700">
-            Total: ${budgetDetails?.amount ? budgetDetails.amount.toLocaleString() : 'No budget...'}
-            </span>
+          <span className="text-sm text-gray-700">Monthly: ${totalExpenses}</span>
+          <span className="text-sm text-gray-700">
+            Total: ${budgetDetails?.amount ? budgetDetails.amount.toLocaleString() : 'N/A'}
+          </span>
         </div>
         </div>
     <br></br>

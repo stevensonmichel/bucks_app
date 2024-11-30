@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const NavBar: React.FC = () => {
   return (
-    <nav className="fixed left-0 top-16 h-screen bg-cyan-400 text-white w-1/5 p-8 space-y-10">
+    <nav className="fixed left-0 top-16 h-screen bg-blue-400 text-white w-1/5 p-8 space-y-10">
       <div className="flex items-center space-x-4">
         <img
           src="/icons/search.png" 

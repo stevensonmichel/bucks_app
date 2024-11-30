@@ -10,12 +10,12 @@ const EditBucket: React.FC<EditBucketProps> = () => {
   const bucket = location.state?.bucket; // Access passed bucket data
   const [name, setName] = useState<string>(bucket?.name || "");
   const [description, setDescription] = useState<string>(bucket?.description || "");
-  const [amount, setAmount] = useState<number | "">(bucket?.max_amount || "");
+  const [max_amount, setAmount] = useState<number | "">(bucket?.max_amount || "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !description || amount === "") {
+    if (!name || !description || max_amount === "") {
       alert("Please fill in all fields");
       return;
     }
@@ -24,7 +24,7 @@ const EditBucket: React.FC<EditBucketProps> = () => {
       id: bucket.id,
       name,
       description,
-      max_amount: Number(amount),
+      max_amount: Number(max_amount),
     };
 
     try {
@@ -91,7 +91,7 @@ const EditBucket: React.FC<EditBucketProps> = () => {
           <input
             type="number"
             id="amount"
-            value={amount}
+            value={max_amount}
             onChange={(e) => setAmount(e.target.value !== "" ? Number(e.target.value) : "")}
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required

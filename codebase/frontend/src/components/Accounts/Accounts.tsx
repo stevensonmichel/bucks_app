@@ -166,7 +166,7 @@ const Accounts: React.FC = () => {
       ) : (
         <div className="overflow-hidden rounded-lg shadow-5xl">
           <table className="min-w-full table-auto bg-gray-100 shadow-md">
-            <thead className="bg-cyan-400 text-white">
+            <thead className="bg-blue-400 text-white">
               <tr>
                 <th className="px-4 py-4 text-left">No</th>
                 <th className="px-4 py-4 text-left">Account Name</th>

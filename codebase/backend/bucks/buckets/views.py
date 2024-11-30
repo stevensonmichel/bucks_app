@@ -36,6 +36,7 @@ class BucketAddView(generics.CreateAPIView):
             response = super().create(request, *args, **kwargs)
             user = request.user
             bucket = request.data 
+            print("information are", request.user, request.data, bucket)
             Notification.objects.create(
                 user=user,
                 message=f'A new bucket "{bucket["name"]}" has been created.',
