@@ -5,11 +5,14 @@ from rest_framework.response import Response
 from .serializers import ExpenseSerializer
 from django.utils import timezone
 from notifications.models import Notification
+from django.db.models import Sum
+from budgets.models import Budget
+from expenses.models import Expense
 
 
 class ExpenseListView(generics.ListCreateAPIView):
     def get(self, request):
-        expenses = Expense.objects.filter(user=request.user)
+        expenses = Expense.objects.filter(user=request.user).order_by('-date')
         print("From Expenses, the user is", request.user, request.user.id)
         
         serializer = ExpenseSerializer(expenses, many=True)
@@ -116,3 +119,30 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
             return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
         expense.delete()
         return Response({"message": "Expense deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+    
+    
+class DailyExpensesView(APIView):
+
+    def get(self, request, budget_id):
+        try:
+            # Retrieve the budget for the user
+            budget = Budget.objects.get(id=budget_id, user=request.user)
+            start_date = budget.start_date
+            end_date = budget.end_date
+            expenses = (
+                Expense.objects.filter(user=request.user, date__range=[start_date, end_date])
+                .values('date')
+                .annotate(total=Sum('amount'))
+                .order_by('date')
+            )
+
+            return Response({
+                "budget_name": budget.name,
+                "start_date": budget.start_date,
+                "end_date": budget.end_date,
+                "expenses": list(expenses),
+            })
+        except Budget.DoesNotExist:
+            return Response({"error": "Budget not found."}, status=404)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)

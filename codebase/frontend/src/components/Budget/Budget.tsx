@@ -89,7 +89,7 @@ const SetBudget: React.FC = () => {
         },
         body: JSON.stringify(budgetData),
       });
-      alert("Budget saved successfully!");
+      
     } catch (error) {
       console.error("Error saving budget:", error);
       alert("Failed to save budget.");

@@ -17,15 +17,13 @@ ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip,
 const Overview: React.FC = () => {
   const navigate = useNavigate();
 
-  // State for budget details
   const [budgetDetails, setBudgetDetails] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch budget details
   useEffect(() => {
     const fetchBudgetDetails = async () => {
-      const token = localStorage.getItem("access_token"); // Retrieve token from localStorage
+      const token = localStorage.getItem("access_token"); 
       if (!token) {
         setError("User is not authenticated. Please log in.");
         setLoading(false);
@@ -33,7 +31,7 @@ const Overview: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/budgets/2/", {
+        const response = await fetch("http://127.0.0.1:8000/api/budgets/3/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -52,17 +50,18 @@ const Overview: React.FC = () => {
 
     fetchBudgetDetails();
   }, []);
+  
 
-    const generateDateLabels = (startDate: string, endDate: string): string[] => {
-      const start = new Date(startDate);
-      const end = new Date(endDate);
-      const labels = [];
+  const generateDateLabels = (startDate: string, endDate: string): string[] => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const labels = [];
 
-    const formatter = new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric', 
-      year: 'numeric', 
-    });
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric', 
+    year: 'numeric', 
+  });
 
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       labels.push(formatter.format(d)); 
@@ -71,7 +70,12 @@ const Overview: React.FC = () => {
     return labels;
   };
     
-    const dateLabels = generateDateLabels(budgetDetails.start_date, budgetDetails.end_date);
+  if (!budgetDetails || !budgetDetails.start_date || !budgetDetails.end_date) {
+    return <p>Loading budget details...</p>; // Handle loading or null state
+  }
+
+  const dateLabels = generateDateLabels(budgetDetails.start_date, budgetDetails.end_date);
+
   
     const expenseGraphData = {
       labels: dateLabels, // Dynamically generated labels

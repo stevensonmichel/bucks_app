@@ -21,6 +21,7 @@ from plaid.model.transactions_get_request import TransactionsGetRequest
 from plaid import ApiException
 from accounts.models import Account
 from budgets.models import Budget
+from datetime import datetime
 
 
 @permission_classes([IsAuthenticated])
@@ -61,7 +62,7 @@ class ExchangePublicTokenView(APIView):
                     accounts = accounts_response['accounts']
                     
                     plaid_item, created = PlaidItem.objects.get_or_create(
-                            user=user,  # Associate with the currently logged-in user
+                            user=user, 
                             defaults={
                                 'access_token': access_token,
                                 'item_id': item_id,
@@ -75,6 +76,14 @@ class ExchangePublicTokenView(APIView):
                         
                     for account in accounts:
                         save_bank_information(account, user)
+                        
+                    transactions_response = get_transactions(request)
+                    if "error" in transactions_response:
+                        print("Error fetching transactions:", transactions_response["error"])
+                    else:
+                        transactions = transactions_response.get("transactions", [])
+                        print("Here are the transactions baby:", transactions)
+                    
 
                     return JsonResponse({
                         'access_token': access_token,
@@ -120,31 +129,72 @@ def get_transaction_count(data):
     """Returns the total number of transactions."""
     return data.get('total_transactions', 0)
 
-class GetTransactionView(APIView):
-    permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        try:
-            plaid_item = PlaidItem.objects.get(user=request.user)
-            
-            budget = Budget.objects.filter(user=request.user)
-            start_date = budget.start_date # start_date = date(2023, 1, 1) 
-            end_date = budget.end_date # end_date = date.today()
-            request_data = TransactionsGetRequest(
-                access_token=plaid_item.access_token,
-                start_date=start_date, 
-                end_date=end_date,
-            )
-            
-            response = plaid_client.transactions_get(request_data)
-            account_info = get_bank_information(response)
-            
-            print("These are the transactions data from plaid:", account_info)
-            return JsonResponse(account_info, safe=False)
+def get_transactions(request):
+    try:
+        plaid_item = PlaidItem.objects.get(user=request.user)
+        budget = Budget.objects.filter(user=request.user).first()
+        if not budget:
+            return JsonResponse({"error": "No budget found for the user"}, status=404)
 
-        except PlaidItem.DoesNotExist:
-            return JsonResponse({"error": "Plaid item not found for the user"}, status=404)
-        except Exception as e:
-            print("Error retrieving transactions:", str(e))
-            return JsonResponse({"error": "Failed to retrieve transactions", "details": str(e)}, status=500)
+        # Extract start_date and end_date from the budget
+        # start_date = budget.start_date
+        # end_date = budget.end_date
+        
+        
+        start = "2024-01-01"  
+        end = "2024-11-30" 
+        
+        start_date = datetime.strptime(start, "%Y-%m-%d").date()
+        end_date = datetime.strptime(end, "%Y-%m-%d").date()
 
+        request_data = TransactionsGetRequest(
+            access_token=plaid_item.access_token,
+            start_date=start_date,
+            end_date=end_date,
+        )
+        
+        print("This is the request data baby", request_data)
+
+        response = plaid_client.transactions_get(request_data)
+        transactions = response['transactions']
+        print("there we can see you", transactions)
+        print("Bro what are you doing?")
+        processed = extract_transaction_details(transactions=transactions)
+        print("The processed are these", processed)
+
+        return JsonResponse({"transactions": transactions}, safe=False, status=200)
+
+    except PlaidItem.DoesNotExist:
+        return JsonResponse({"error": "Plaid item not found for the user"}, status=404)
+    except Budget.DoesNotExist:
+        return JsonResponse({"error": "No budget found for the user"}, status=404)
+    except Exception as e:
+        print("Error retrieving transactions:", str(e))
+        return JsonResponse({"error": "Failed to retrieve transactions", "details": str(e)}, status=500)
+    
+    
+    
+from typing import List, Dict
+
+def extract_transaction_details(transactions):
+    """
+    Extract date, name, category, amount, and description from transaction data.
+    
+    :param transactions: List of transaction dictionaries
+    :return: Processed list of dictionaries containing the required fields
+    """
+    processed_transactions = []
+    for transaction in transactions:
+        category = transaction.get("category")  
+        if not isinstance(category, list): 
+            category = []
+        
+        processed_transactions.append({
+            "date": transaction.get("date"),  
+            "name": transaction.get("name"), 
+            "category": ", ".join(category),  
+            "amount": transaction.get("amount"), 
+            "description": transaction.get("merchant_name") or transaction.get("name")
+        })
+    return processed_transactions

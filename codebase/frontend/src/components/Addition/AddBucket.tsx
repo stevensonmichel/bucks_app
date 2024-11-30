@@ -53,7 +53,7 @@ const AddBucket: React.FC<AddBucketProps> = ({ onAddBucket }) => {
         if (onAddBucket) {
           onAddBucket(newBucket);
         }
-
+        alert("Bucket added successfully!")
         navigate("/buckets");
       } else {
         const errorData = await response.json();
