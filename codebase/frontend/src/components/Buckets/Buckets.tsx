@@ -84,65 +84,71 @@ const Buckets: React.FC = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-3 gap-10 p-20">
-      {buckets.map((bucket) => (
-        <div
-          key={bucket.id}
-          className={`border-8 p-10 rounded-lg relative transition-colors cursor-pointer ${
-            selectedBucketId === bucket.id
-              ? 'bg-blue-200 border-blue-600'
-              : 'bg-white border-blue-500 hover:bg-gray-200'
-          }`}
-          onClick={() => handleSelect(bucket.id)}
-        >
-          <h2 className="text-3xl font-bold flex justify-center items-center">{bucket.name}</h2>
-          <div className="flex flex-col space-y-2 mt-4">
-            <div className="flex">
-            
-              <div className="w-1/2 flex flex-col space-y-4">
-                <span className="text-xl">Maximum</span>
-                <span className="text-xl">Current</span>
-                <span className="text-xl">Remaining</span>
-                <span className="text-xl">Status</span>
-              </div>
+    <div className="max-w-5xl mx-auto p-10 bg-gray-400 shadow-md rounded-lg">
+      {buckets.length === 0 ? (
+        <p className="text-gray-600">No buckets found.</p>
+      ) : (
+      <div className="grid grid-cols-3 gap-8 p-0">
+        {buckets.map((bucket) => (
+          <div
+            key={bucket.id}
+            className={`border-8 p-10 rounded-lg relative transition-colors cursor-pointer ${
+              selectedBucketId === bucket.id
+                ? 'bg-blue-200 border-blue-600'
+                : 'bg-white border-blue-500 hover:bg-gray-200'
+            }`}
+            onClick={() => handleSelect(bucket.id)}
+          >
+            <h2 className="text-3xl font-bold flex justify-center items-center">{bucket.name}</h2>
+            <div className="flex flex-col space-y-2 mt-4">
+              <div className="flex">
+              
+                <div className="w-1/2 flex flex-col space-y-4">
+                  <span className="text-xl">Maximum</span>
+                  <span className="text-xl">Current</span>
+                  <span className="text-xl">Remaining</span>
+                  <span className="text-xl">Status</span>
+                </div>
 
-             
-              <div className="border-l-2 border-gray-300 mx-4"></div>
+              
+                <div className="border-l-2 border-gray-300 mx-4"></div>
+
+            
+                <div className="w-1/2 flex flex-col space-y-4 text-right">
+                  <span className="text-xl">{bucket.max_amount || 'None'}</span>
+                  <span className="text-xl">{bucket.current_amount || 'None'}</span>
+                  <span className="text-xl">{bucket.remaining_amount || 'None'}</span>
+                  <span className="text-xl">{bucket.status || 'None'}</span>
+                </div>
+              </div>
+            </div>
 
           
-              <div className="w-1/2 flex flex-col space-y-4 text-right">
-                <span className="text-xl">{bucket.max_amount || 'None'}</span>
-                <span className="text-xl">{bucket.current_amount || 'None'}</span>
-                <span className="text-xl">{bucket.remaining_amount || 'None'}</span>
-                <span className="text-xl">{bucket.status || 'None'}</span>
+            {selectedBucketId === bucket.id && (
+              <div
+                className="absolute top-4 right-4 flex space-x-2"
+                onClick={(e) => e.stopPropagation()} 
+              >
+                <button
+                  onClick={() => handleEdit(bucket.id)}
+                  className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(bucket.id)}
+                  className="text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
               </div>
-            </div>
+            )}
           </div>
-
-         
-          {selectedBucketId === bucket.id && (
-            <div
-              className="absolute top-4 right-4 flex space-x-2"
-              onClick={(e) => e.stopPropagation()} 
-            >
-              <button
-                onClick={() => handleEdit(bucket.id)}
-                className="text-sm text-white bg-blue-500 px-2 py-1 rounded hover:bg-blue-600"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(bucket.id)}
-                className="text-sm text-white bg-red-500 px-2 py-1 rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
+      </div>
+      )}
     </div>
-  );
-};
+    );
+  };
 
 export default Buckets;

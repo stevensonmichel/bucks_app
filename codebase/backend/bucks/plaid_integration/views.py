@@ -83,6 +83,8 @@ class ExchangePublicTokenView(APIView):
                         save_bank_information(account, user)
                         
                     transactions_response = get_transactions(request)
+                    print("We got transactions", transactions_response)
+                    
                 
                     add_buckets(transactions_response, user)
                     add_expenses(transactions_response, user)
@@ -106,6 +108,10 @@ def save_bank_information(data, user):
     account_type = data['type']
     subtype = data.get('subtype', '')
     balance = data['balances'].get('current', '')
+    
+    if Account.objects.filter(plaid_account_id=plaid_account_id, user=user).exists():
+        print(f"Duplicate expense detected: {plaid_account_id}. Skipping creation.")
+        return 
 
     account, created = Account.objects.get_or_create(
         user=user,
@@ -117,6 +123,14 @@ def save_bank_information(data, user):
             'balance': balance,
         }
     )
+    
+    Notification.objects.create(
+                            user=user,
+                            message=f'A new account "{name}" has been created.',
+                            type='account',
+                            date=now(),
+                            read=False,
+                        )
 
     if not created:
         account.name = name
@@ -124,6 +138,14 @@ def save_bank_information(data, user):
         account.subtype = subtype
         account.balance = balance
         account.save()
+        
+        Notification.objects.create(
+                            user=user,
+                            message=f'The account "{name}" has been updated.',
+                            type='account',
+                            date=now(),
+                            read=False,
+                        )
 
     return
 
@@ -135,46 +157,49 @@ def get_transaction_count(data):
 
 def get_transactions(request):
     try:
+        # Retrieve the Plaid item and budget for the user
         plaid_item = PlaidItem.objects.get(user=request.user)
-        budget = Budget.objects.filter(user=request.user).first()
-        if not budget:
-            return JsonResponse({"error": "No budget found for the user"}, status=404)
+        # budget = Budget.objects.filter(user=request.user).first()
+        # if not budget:
+        #     raise ValueError("No budget found for the user")
 
-        # Extract start_date and end_date from the budget
-        # start_date = budget.start_date
-        # end_date = budget.end_date
-        
-        
-        start = "2024-01-01"  
-        end = "2024-11-30" 
-        
+        # Extract start_date and end_date (hardcoded for now)
+        start = "2024-01-01"
+        end = "2024-11-30"
         start_date = datetime.strptime(start, "%Y-%m-%d").date()
         end_date = datetime.strptime(end, "%Y-%m-%d").date()
 
+        # Fetch transactions using Plaid's API
         request_data = TransactionsGetRequest(
             access_token=plaid_item.access_token,
             start_date=start_date,
             end_date=end_date,
         )
-        
-        print("This is the request data baby", request_data)
-
         response = plaid_client.transactions_get(request_data)
+
+        # Extract and process transactions
         transactions = response['transactions']
-        print("I am just saying the transactions are", transactions)
+        print("We got raw transactions", transactions)
         processed = extract_transaction_details(transactions=transactions)
-        print("The processed are these", processed)
+
+        # Ensure processed is a list of dictionaries
+        if not isinstance(processed, list) or not all(isinstance(item, dict) for item in processed):
+            raise ValueError("Processed transactions are not in the expected format")
 
         return processed
 
     except PlaidItem.DoesNotExist:
-        return JsonResponse({"error": "Plaid item not found for the user"}, status=404)
+        print("Error: Plaid item not found for the user")
+        return []
     except Budget.DoesNotExist:
-        return JsonResponse({"error": "No budget found for the user"}, status=404)
+        print("Error: Budget not found for the user")
+        return []
+    except ValueError as ve:
+        print(f"ValueError: {str(ve)}")
+        return []
     except Exception as e:
         print("Error retrieving transactions:", str(e))
-        return JsonResponse({"error": "Failed to retrieve transactions", "details": str(e)}, status=500)
-    
+        return []
     
     
 from typing import List, Dict
@@ -192,6 +217,7 @@ def extract_transaction_details(transactions):
             "category": ", ".join(category),  
             "amount": transaction.get("amount"), 
             "description": transaction.get("merchant_name") or transaction.get("name"),
+            "transaction_id": transaction.get("transaction_id"),
             "account_id": transaction.get("account_id"),
             "account_owner": transaction.get("account_owner"),
         })
@@ -253,7 +279,7 @@ def add_expenses(processed_data, user):
                         defaults={
                             'description': 'pending',
                             'max_amount': None,
-                            'current_amount': 0.00,
+                            'current_amount': entry['amount'],
                             'is_active': True,
                             'created_at': now(),
                             'updated_at': now(),
@@ -267,11 +293,17 @@ def add_expenses(processed_data, user):
                 if not account:
                     raise ValueError(f"Account with plaid_account_id {plaid_account_id} not found for user {user.id}.")
 
+                plaid_transaction_id = entry.get('transaction_id')  # Assuming 'transaction_id' is unique from Plaid
+                if Expense.objects.filter(plaid_transaction_id=plaid_transaction_id, user=user).exists():
+                    print(f"Duplicate expense detected: {plaid_transaction_id}. Skipping creation.")
+                    continue
 
                 # Create the expense
-                Expense.objects.create(
+                print("Ladies and Gents, the bucket is", bucket)
+                Expense.objects.get_or_create(
                     user=user,
                     name=entry['name'],
+                    plaid_transaction_id=entry['transaction_id'],
                     description=entry['description'],
                     amount=entry['amount'],
                     date=entry['date'],

@@ -31,7 +31,7 @@ const Overview: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/budgets/3/", {
+        const response = await fetch("http://127.0.0.1:8000/api/budgets/6/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -50,18 +50,17 @@ const Overview: React.FC = () => {
 
     fetchBudgetDetails();
   }, []);
-  
 
   const generateDateLabels = (startDate: string, endDate: string): string[] => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     const labels = [];
 
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric', 
-    year: 'numeric', 
-  });
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',
+      day: 'numeric', 
+      year: 'numeric', 
+    });
 
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       labels.push(formatter.format(d)); 
@@ -69,28 +68,25 @@ const Overview: React.FC = () => {
 
     return labels;
   };
-    
-  if (!budgetDetails || !budgetDetails.start_date || !budgetDetails.end_date) {
-    return <p>Loading budget details...</p>; // Handle loading or null state
-  }
 
-  const dateLabels = generateDateLabels(budgetDetails.start_date, budgetDetails.end_date);
+  // Handle no budget state gracefully
+  const dateLabels = budgetDetails?.start_date && budgetDetails?.end_date
+    ? generateDateLabels(budgetDetails.start_date, budgetDetails.end_date)
+    : [];
 
-  
-    const expenseGraphData = {
-      labels: dateLabels, // Dynamically generated labels
-      datasets: [
-        {
-          label: 'Expenses ($)',
-          data: Array(dateLabels.length).fill(500), // Example: Fill with dummy data
-          fill: true,
-          borderColor: '#36A2EB',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          tension: 0.5,
-        },
-      ],
-    };
-
+  const expenseGraphData = {
+    labels: dateLabels, 
+    datasets: [
+      {
+        label: 'Expenses ($)',
+        data: Array(dateLabels.length).fill(500), 
+        fill: true,
+        borderColor: '#36A2EB',
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        tension: 0.5,
+      },
+    ],
+  };
 
   const expenseGraphOptions = {
     responsive: true,
@@ -121,7 +117,7 @@ const Overview: React.FC = () => {
       },
     },
   };
-  
+
   const labelInfo: string[] = budgetDetails?.buckets?.map((bucket: any) => bucket.name) || [];
   const labelData: number[] = budgetDetails?.buckets?.map((bucket: any) => bucket.current_amount) || [];
 
@@ -132,24 +128,21 @@ const Overview: React.FC = () => {
       '#45B39D', '#F4D03F', '#AF7AC5', '#F0B27A', '#58D68D', '#85C1E9',
       '#E59866', '#AAB7B8',
     ];
-    // Repeat colors if there are more buckets than colors
     return Array.from({ length: numColors }, (_, i) => colors[i % colors.length]);
   };
 
-  // Dynamically generate colors to match the number of labels
   const backgroundColors: string[] = generateColors(labelInfo.length);
 
   const bucketsBreakdownData = {
-    labels: labelInfo, // Array of bucket names
+    labels: labelInfo, 
     datasets: [
       {
-        data: labelData, // Array of bucket data
+        data: labelData, 
         backgroundColor: backgroundColors,
         hoverBackgroundColor: backgroundColors,
       },
     ],
   };
-
 
   const totalExpenses = budgetDetails?.total_expenses || 0;
   const progressPercentage = budgetDetails?.amount
@@ -167,97 +160,99 @@ const Overview: React.FC = () => {
           Set Budget
         </button>
         <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">
-          Export Report
+          View Budget
         </button>
       </div>
 
-      {/* Grid Layout for Charts */}
-      <div className="grid grid-cols-2 gap-80">
-        {/* Expense Graph */}
+      {/* Conditional Rendering */}
+      {loading ? (
+        <p className="text-center text-gray-500">Loading...</p>
+      ) : error ? (
+        <p className="text-center text-red-500">You have not set a budget yet. Please do so.</p>
+      ) : (
         <div>
-          <h2 className="text-2xl font-semibold mb-4">Expense Graph</h2>
-          <div style={{ width: '600px', height: '400px' }}>
-            <Line data={expenseGraphData} options={expenseGraphOptions} />
-          </div>
-        </div>
-
-        {/* Buckets Breakdown */}
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">Buckets Breakdown</h2>
-          <div style={{ width: '350px', height: '350px', margin: '0 auto' }}>
-            <Doughnut
-              data={bucketsBreakdownData}
-              options={{
-                maintainAspectRatio: false,
-              }}
-            />
-          </div>
-        </div>
-      </div>
-      <br></br>
-      
-      {/* Progress Bar */}
-        <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Expenses Progress</h2>
-        <div className="w-full bg-gray-300 rounded-md h-6">
-          <div
-            className="bg-blue-500 h-6 rounded-md text-white text-sm flex items-center justify-center"
-            style={{ width: `${progressPercentage}%` }}
-          >
-            {progressPercentage.toFixed(1)}%
-          </div>
-        </div>
-        <div className="flex justify-between mt-2">
-          <span className="text-sm text-gray-700">Monthly: ${totalExpenses}</span>
-          <span className="text-sm text-gray-700">
-            Total: ${budgetDetails?.amount ? budgetDetails.amount.toLocaleString() : 'N/A'}
-          </span>
-        </div>
-        </div>
-    <br></br>
-    
-      {/* Budget Details */}
-        <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Current Budget Details</h2>
-        {loading ? (
-            <p className="text-center text-gray-500">Loading...</p>
-        ) : error ? (
-            <p className="text-center text-red-500">You have not set a budget yet. Please do so</p>
-        ) : (
-            budgetDetails && (
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-8 rounded-lg shadow-md">
-                <br></br>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="flex flex-col items-center">
-                    <h3 className="text-sm font-medium text-gray-600">Name</h3>
-                    <p className="text-lg font-semibold text-gray-800">{budgetDetails.name}</p>
-                </div>
-                <div className="flex flex-col items-center">
-                    <h3 className="text-sm font-medium text-gray-600">Amount</h3>
-                    <p className="text-lg font-semibold text-gray-800">${budgetDetails.amount.toLocaleString()}</p>
-                </div>
-                </div>
-                <br></br>
-                <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col items-center">
-                    <h3 className="text-sm font-medium text-gray-600">Start Date</h3>
-                    <p className="text-lg font-semibold text-gray-800">{new Date(budgetDetails.start_date).toLocaleDateString()}</p>
-                </div>
-                <div className="flex flex-col items-center">
-                    <h3 className="text-sm font-medium text-gray-600">End Date</h3>
-                    <p className="text-lg font-semibold text-gray-800">{new Date(budgetDetails.end_date).toLocaleDateString()}</p>
-                </div>
-                </div>
-                <br></br>
-                <br></br>
-                <div className="mt-4 text-center">
-                <p className="text-sm text-gray-500">Ensure you stay within your budget to achieve your financial goals!</p>
-                </div>
-                <br></br>
+          {/* Charts and Details */}
+          <div className="grid grid-cols-2 gap-80">
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Expense Graph</h2>
+              <div style={{ width: '600px', height: '400px' }}>
+                <Line data={expenseGraphData} options={expenseGraphOptions} />
+              </div>
             </div>
-            )
-        )}
+
+            <div>
+              <h2 className="text-2xl font-semibold mb-4">Buckets Breakdown</h2>
+              <div style={{ width: '350px', height: '350px', margin: '0 auto' }}>
+                <Doughnut
+                  data={bucketsBreakdownData}
+                  options={{ maintainAspectRatio: false }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Budget Progress */}
+          <div className="mt-8">
+            <h2 className="text-2xl font-semibold mb-4">Expenses Progress</h2>
+            <div className="w-full bg-gray-300 rounded-md h-6">
+              <div
+                className="bg-blue-500 h-6 rounded-md text-white text-lg flex items-center justify-center"
+                style={{ width: `${progressPercentage}%` }}
+              >
+                {progressPercentage.toFixed(1)}%
+              </div>
+            </div>
+            <div className="flex justify-between mt-2">
+              <span className="text-lg text-gray-700">Monthly: ${totalExpenses}</span>
+              <span className="text-lg text-gray-700">
+                Total: ${budgetDetails?.amount ? budgetDetails.amount.toLocaleString() : 'N/A'}
+              </span>
+            </div>
+          </div>
+          {/* Budget Details */}
+            <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Current Budget Details</h2>
+            {loading ? (
+                <p className="text-center text-gray-500">Loading...</p>
+            ) : error ? (
+                <p className="text-center text-red-500">You have not set a budget yet. Please do so</p>
+            ) : (
+                budgetDetails && (
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-8 rounded-lg shadow-md">
+                    <br></br>
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="flex flex-col items-center">
+                          <h3 className="text-sm font-medium text-gray-600">Name</h3>
+                          <p className="text-lg font-semibold text-gray-800">{budgetDetails.name}</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                          <h3 className="text-sm font-medium text-gray-600">Amount</h3>
+                          <p className="text-lg font-semibold text-gray-800">${budgetDetails.amount.toLocaleString()}</p>
+                      </div>
+                    </div>
+                    <br></br>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex flex-col items-center">
+                          <h3 className="text-sm font-medium text-gray-600">Start Date</h3>
+                          <p className="text-lg font-semibold text-gray-800">{new Date(budgetDetails.start_date).toLocaleDateString()}</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                          <h3 className="text-sm font-medium text-gray-600">End Date</h3>
+                          <p className="text-lg font-semibold text-gray-800">{new Date(budgetDetails.end_date).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-500">Ensure you stay within your budget to achieve your financial goals!</p>
+                    </div>
+                    <br></br>
+                    </div>
+                )
+            )}
+          </div>
         </div>
+      )}
     </div>
   );
 };

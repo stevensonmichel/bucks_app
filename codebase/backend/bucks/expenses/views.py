@@ -13,7 +13,6 @@ from expenses.models import Expense
 class ExpenseListView(generics.ListCreateAPIView):
     def get(self, request):
         expenses = Expense.objects.filter(user=request.user).order_by('-date')
-        print("From Expenses, the user is", request.user, request.user.id)
         
         serializer = ExpenseSerializer(expenses, many=True)
 
@@ -27,24 +26,16 @@ class ExpenseAddView(generics.CreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         if user.is_authenticated:
-            print("Adding new expense for user:", user, user.id)
             
             expense = serializer.save(user=user) 
             if expense.bucket: 
-                print("I see you here")
                 bucket = expense.bucket
                 bucket.current_amount += expense.amount
                 bucket.save() 
-
-                print(
-                    f"Updated bucket '{bucket.name}' current_amount: {bucket.current_amount}"
-                )
         else:
-            print("Anonymous user adding an expense")
             serializer.save()
 
     def create(self, request, *args, **kwargs):
-        print("Received payload:", request.data)
 
         try:
             response = super().create(request, *args, **kwargs)

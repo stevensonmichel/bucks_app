@@ -26,7 +26,6 @@ class BudgetDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BudgetSerializer
 
     def get_queryset(self):
-        print("I see the request, hell yeah", self.request)
         return Budget.objects.filter(user=self.request.user)
     
     def retrieve(self, request, *args, **kwargs):
@@ -36,5 +35,4 @@ class BudgetDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance = self.get_object() 
         serializer = self.get_serializer(instance)  
         response_data = serializer.data  
-        print("Response Data:", response_data) 
         return Response(response_data)  

@@ -24,19 +24,15 @@ class BucketAddView(generics.CreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         if user.is_authenticated:
-            print("Adding new bucket for user:", user, user.id)
             serializer.save(user=user)
         else:
-            print("Anonymous user adding a bucket")
             serializer.save()
 
     def create(self, request, *args, **kwargs):
-        print("Received payload:", request.data)
         try:
             response = super().create(request, *args, **kwargs)
             user = request.user
-            bucket = request.data 
-            print("information are", request.user, request.data, bucket)
+            bucket = request.data
             Notification.objects.create(
                 user=user,
                 message=f'A new bucket "{bucket["name"]}" has been created.',
