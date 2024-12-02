@@ -12,7 +12,7 @@ from django.utils import timezone
 
 class BucketListView(APIView):
     def get(self, request):
-        buckets = Bucket.objects.filter(user=request.user)
+        buckets = Bucket.objects.filter(user=request.user).order_by('-updated_at')
         serializer = BucketSerializer(buckets, many=True)
         return Response(serializer.data)
     

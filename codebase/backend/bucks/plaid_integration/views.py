@@ -21,7 +21,12 @@ from plaid.model.transactions_get_request import TransactionsGetRequest
 from plaid import ApiException
 from accounts.models import Account
 from budgets.models import Budget
+from buckets.models import Bucket
+from expenses.models import Expense
+from notifications.models import Notification
 from datetime import datetime
+from django.db import transaction
+from django.utils.timezone import now
 
 
 @permission_classes([IsAuthenticated])
@@ -78,11 +83,9 @@ class ExchangePublicTokenView(APIView):
                         save_bank_information(account, user)
                         
                     transactions_response = get_transactions(request)
-                    if "error" in transactions_response:
-                        print("Error fetching transactions:", transactions_response["error"])
-                    else:
-                        transactions = transactions_response.get("transactions", [])
-                        print("Here are the transactions baby:", transactions)
+                
+                    add_buckets(transactions_response, user)
+                    add_expenses(transactions_response, user)
                     
 
                     return JsonResponse({
@@ -158,12 +161,11 @@ def get_transactions(request):
 
         response = plaid_client.transactions_get(request_data)
         transactions = response['transactions']
-        print("there we can see you", transactions)
-        print("Bro what are you doing?")
+        print("I am just saying the transactions are", transactions)
         processed = extract_transaction_details(transactions=transactions)
         print("The processed are these", processed)
 
-        return JsonResponse({"transactions": transactions}, safe=False, status=200)
+        return processed
 
     except PlaidItem.DoesNotExist:
         return JsonResponse({"error": "Plaid item not found for the user"}, status=404)
@@ -178,12 +180,6 @@ def get_transactions(request):
 from typing import List, Dict
 
 def extract_transaction_details(transactions):
-    """
-    Extract date, name, category, amount, and description from transaction data.
-    
-    :param transactions: List of transaction dictionaries
-    :return: Processed list of dictionaries containing the required fields
-    """
     processed_transactions = []
     for transaction in transactions:
         category = transaction.get("category")  
@@ -195,6 +191,103 @@ def extract_transaction_details(transactions):
             "name": transaction.get("name"), 
             "category": ", ".join(category),  
             "amount": transaction.get("amount"), 
-            "description": transaction.get("merchant_name") or transaction.get("name")
+            "description": transaction.get("merchant_name") or transaction.get("name"),
+            "account_id": transaction.get("account_id"),
+            "account_owner": transaction.get("account_owner"),
         })
     return processed_transactions
+
+
+
+def add_buckets(processed_data, user):
+    try:
+        with transaction.atomic():
+            bucket_map = {}  # To track already created buckets
+            for entry in processed_data:
+                category = entry.get('category', '').strip() or 'Uncategorized'
+
+                # Avoid creating duplicate buckets for the same category
+                if category not in bucket_map:
+                    bucket, created = Bucket.objects.get_or_create(
+                        user=user,
+                        name=category,
+                        defaults={
+                            'description': 'pending',
+                            'max_amount': None,
+                            'current_amount': 0.00,
+                            'is_active': True,
+                            'created_at': now(),
+                            'updated_at': now(),
+                        },
+                    )
+                    if created:
+                        # Only create a notification for new buckets
+                        Notification.objects.create(
+                            user=user,
+                            message=f'A new bucket "{category}" has been created.',
+                            type='bucket',
+                            date=now(),
+                            read=False,
+                        )
+
+                    bucket_map[category] = bucket  # Cache the bucket
+
+    except Exception as e:
+        print(f"Error occurred while adding buckets: {e}")
+
+        
+
+def add_expenses(processed_data, user):
+    try:
+        with transaction.atomic():
+            for entry in processed_data:
+                category = entry.get('category', '').strip() or 'Uncategorized'
+
+                # Find the corresponding bucket for the expense
+                bucket = Bucket.objects.filter(name=category, user=user).first()
+                if not bucket:
+                    # Default to an "Uncategorized" bucket if the category bucket doesn't exist
+                    bucket, _ = Bucket.objects.get_or_create(
+                        user=user,
+                        name='Uncategorized',
+                        defaults={
+                            'description': 'pending',
+                            'max_amount': None,
+                            'current_amount': 0.00,
+                            'is_active': True,
+                            'created_at': now(),
+                            'updated_at': now(),
+                        },
+                    )
+                
+                
+                
+                plaid_account_id = entry.get('account_id')
+                account = Account.objects.filter(plaid_account_id=plaid_account_id, user=user).first()
+                if not account:
+                    raise ValueError(f"Account with plaid_account_id {plaid_account_id} not found for user {user.id}.")
+
+
+                # Create the expense
+                Expense.objects.create(
+                    user=user,
+                    name=entry['name'],
+                    description=entry['description'],
+                    amount=entry['amount'],
+                    date=entry['date'],
+                    account=account,  # Use the passed account ID
+                    created_at=now(),
+                    bucket=bucket,
+                )
+
+                # Create a notification for the new expense
+                Notification.objects.create(
+                    user=user,
+                    message=f'A new expense "{entry["name"]}" from Plaid has been created.',
+                    type='expense',
+                    date=now(),
+                    read=False,
+                )
+
+    except Exception as e:
+        print(f"Error occurred while adding expenses: {e}")

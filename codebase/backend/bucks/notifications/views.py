@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 class NotificationListView(generics.ListCreateAPIView):
     def get(self, request):
-        notifications = Notification.objects.filter(user=request.user)
+        notifications = Notification.objects.filter(user=request.user).order_by('-date')
         
         serializer = NotificationSerializer(notifications, many=True)
         

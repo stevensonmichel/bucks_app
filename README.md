@@ -87,7 +87,7 @@ Stevenson hopes that BUCK$ will make a positive impact on users, helping them ma
 
 <br><br>
 
-## Installation and use guide (linked to install.md) 
+## Installation and use guide
 [Installation Guide](installation.md)
 
 <br><br>
