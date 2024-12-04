@@ -31,16 +31,17 @@ const Overview: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/budgets/11/", {
+        const response = await fetch("http://127.0.0.1:8000/api/budgets/", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
+        
         if (!response.ok) {
           throw new Error("Failed to fetch budget details");
         }
 
         const data = await response.json();
-        setBudgetDetails(data);
+        console.log("This is the data from fetching budget", data)
+        setBudgetDetails(data[0] || null);
       } catch (err: any) {
         setError(err.message || "Something went wrong");
       } finally {
@@ -149,112 +150,116 @@ const Overview: React.FC = () => {
     ? (totalExpenses / budgetDetails.amount) * 100
     : 0;
 
-  return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      {/* Buttons */}
-      <div className="flex space-x-4 mb-6">
-        <button
-          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
-          onClick={() => navigate('/setBudget')}
-        >
-          Set Budget
-        </button>
-        <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">
-          View Budget
-        </button>
-      </div>
-
-      {/* Conditional Rendering */}
-      {loading ? (
-        <p className="text-center text-gray-500">Loading...</p>
-      ) : error ? (
-        <p className="text-center text-red-500">You have not set a budget yet. Please do so.</p>
-      ) : (
-        <div>
-          {/* Charts and Details */}
-          <div className="grid grid-cols-2 gap-80">
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Expense Graph</h2>
-              <div style={{ width: '600px', height: '400px' }}>
-                <Line data={expenseGraphData} options={expenseGraphOptions} />
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Buckets Breakdown</h2>
-              <div style={{ width: '350px', height: '350px', margin: '0 auto' }}>
-                <Doughnut
-                  data={bucketsBreakdownData}
-                  options={{ maintainAspectRatio: false }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Budget Progress */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold mb-4">Expenses Progress</h2>
-            <div className="w-full bg-gray-300 rounded-md h-6">
-              <div
-                className="bg-blue-500 h-6 rounded-md text-white text-lg flex items-center justify-center"
-                style={{ width: `${progressPercentage}%` }}
-              >
-                {progressPercentage.toFixed(1)}%
-              </div>
-            </div>
-            <div className="flex justify-between mt-2">
-              <span className="text-lg text-gray-700">Monthly: ${totalExpenses}</span>
-              <span className="text-lg text-gray-700">
-                Total: ${budgetDetails?.amount ? budgetDetails.amount.toLocaleString() : 'N/A'}
-              </span>
-            </div>
-          </div>
-          {/* Budget Details */}
-            <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Current Budget Details</h2>
-            {loading ? (
-                <p className="text-center text-gray-500">Loading...</p>
-            ) : error ? (
-                <p className="text-center text-red-500">You have not set a budget yet. Please do so</p>
-            ) : (
-                budgetDetails && (
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-8 rounded-lg shadow-md">
-                    <br></br>
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="flex flex-col items-center">
-                          <h3 className="text-sm font-medium text-gray-600">Name</h3>
-                          <p className="text-lg font-semibold text-gray-800">{budgetDetails.name}</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                          <h3 className="text-sm font-medium text-gray-600">Amount</h3>
-                          <p className="text-lg font-semibold text-gray-800">${budgetDetails.amount.toLocaleString()}</p>
-                      </div>
-                    </div>
-                    <br></br>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex flex-col items-center">
-                          <h3 className="text-sm font-medium text-gray-600">Start Date</h3>
-                          <p className="text-lg font-semibold text-gray-800">{new Date(budgetDetails.start_date).toLocaleDateString()}</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                          <h3 className="text-sm font-medium text-gray-600">End Date</h3>
-                          <p className="text-lg font-semibold text-gray-800">{new Date(budgetDetails.end_date).toLocaleDateString()}</p>
-                      </div>
-                    </div>
-                    <br></br>
-                    <br></br>
-                    <div className="mt-4 text-center">
-                    <p className="text-sm text-gray-500">Ensure you stay within your budget to achieve your financial goals!</p>
-                    </div>
-                    <br></br>
-                    </div>
-                )
-            )}
-          </div>
+    return (
+      <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+        {/* Buttons */}
+        <div className="flex space-x-4 mb-6">
+          {/* Set Budget Button */}
+          <button
+            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+            onClick={() => navigate('/setBudget')}
+          >
+            Set Budget
+          </button>
+          
+          {/* Edit/View Budget Button */}
+          <button
+            className={`px-4 py-2 font-semibold rounded-md ${
+              budgetDetails
+                ? 'bg-blue-500 text-white hover:bg-blue-600'
+                : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+            }`}
+            onClick={() => budgetDetails && navigate(`/edit-budget/${budgetDetails?.id}`)}
+            disabled={!budgetDetails} // Disable button if no budget
+          >
+            Edit Budget
+          </button>
         </div>
-      )}
-    </div>
-  );
+    
+        {/* Conditional Rendering */}
+        {loading ? (
+          <p className="text-center text-gray-500">Loading...</p>
+        ) : error ? (
+          <p className="text-center text-red-500">Error: {error}</p>
+        ) : !budgetDetails ? (
+          // Display nothing except buttons if no budget
+          <p className="text-center text-gray-700 mt-4">
+            No budget found. Please set a new budget to proceed.
+          </p>
+        ) : (
+          <div>
+            {/* Charts and Details */}
+            <div className="grid grid-cols-2 gap-80">
+              <div>
+                <h2 className="text-2xl font-semibold mb-4">Expense Graph</h2>
+                <div style={{ width: '600px', height: '400px' }}>
+                  <Line data={expenseGraphData} options={expenseGraphOptions} />
+                </div>
+              </div>
+    
+              <div>
+                <h2 className="text-2xl font-semibold mb-4">Buckets Breakdown</h2>
+                <div style={{ width: '350px', height: '350px', margin: '0 auto' }}>
+                  <Doughnut
+                    data={bucketsBreakdownData}
+                    options={{ maintainAspectRatio: false }}
+                  />
+                </div>
+              </div>
+            </div>
+    
+            {/* Budget Progress */}
+            <div className="mt-8">
+              <h2 className="text-2xl font-semibold mb-4">Expenses Progress</h2>
+              <div className="w-full bg-gray-300 rounded-md h-6">
+                <div
+                  className="bg-blue-500 h-6 rounded-md text-white text-lg flex items-center justify-center"
+                  style={{ width: `${progressPercentage}%` }}
+                >
+                  {progressPercentage.toFixed(1)}%
+                </div>
+              </div>
+              <div className="flex justify-between mt-2">
+                <span className="text-lg text-gray-700">Monthly: ${totalExpenses}</span>
+                <span className="text-lg text-gray-700">
+                  Total: ${budgetDetails?.amount ? budgetDetails.amount.toLocaleString() : 'N/A'}
+                </span>
+              </div>
+            </div>
+    
+            {/* Budget Details */}
+            <div className="mt-8">
+              <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">Current Budget Details</h2>
+              <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-8 rounded-lg shadow-md">
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="flex flex-col items-center">
+                    <h3 className="text-sm font-medium text-gray-600">Name</h3>
+                    <p className="text-lg font-semibold text-gray-800">{budgetDetails.name}</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h3 className="text-sm font-medium text-gray-600">Amount</h3>
+                    <p className="text-lg font-semibold text-gray-800">${budgetDetails.amount ? Number(budgetDetails.amount).toLocaleString() : 'N/A'}</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col items-center">
+                    <h3 className="text-sm font-medium text-gray-600">Start Date</h3>
+                    <p className="text-lg font-semibold text-gray-800">{budgetDetails.start_date ? new Date(budgetDetails.start_date).toLocaleDateString() : 'N/A'}</p>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <h3 className="text-sm font-medium text-gray-600">End Date</h3>
+                    <p className="text-lg font-semibold text-gray-800">{budgetDetails.end_date ? new Date(budgetDetails.end_date).toLocaleDateString() : 'N/A'}</p>
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <p className="text-sm text-gray-500">Ensure you stay within your budget to achieve your financial goals!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
 };
 
 export default Overview;

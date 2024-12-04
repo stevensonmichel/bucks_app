@@ -9,6 +9,7 @@ class Budget(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     selected_buckets = models.JSONField()  # Assuming the IDs of the buckets are stored as a list
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    is_active = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name

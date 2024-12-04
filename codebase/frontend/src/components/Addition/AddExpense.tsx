@@ -67,6 +67,7 @@ const AddExpense: React.FC<AddExpenseProps> = ({ buckets }) => {
         setBucket("");
 
         alert("Expense added successfully!");
+        navigate("/expenses");
       } else {
         const errorData = await response.json();
         console.error("Error adding expense:", errorData);

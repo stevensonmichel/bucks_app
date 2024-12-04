@@ -89,6 +89,7 @@ const SetBudget: React.FC = () => {
         },
         body: JSON.stringify(budgetData),
       });
+      navigate("/overview")
       
     } catch (error) {
       console.error("Error saving budget:", error);
