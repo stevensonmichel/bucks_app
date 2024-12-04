@@ -27,6 +27,7 @@ from notifications.models import Notification
 from datetime import datetime
 from django.db import transaction
 from django.utils.timezone import now
+from decimal import Decimal
 
 
 @permission_classes([IsAuthenticated])
@@ -263,6 +264,9 @@ def add_buckets(processed_data, user):
 
         
 
+from django.db import transaction
+from django.utils.timezone import now
+
 def add_expenses(processed_data, user):
     try:
         with transaction.atomic():
@@ -279,15 +283,20 @@ def add_expenses(processed_data, user):
                         defaults={
                             'description': 'pending',
                             'max_amount': None,
-                            'current_amount': entry['amount'],
+                            'current_amount': abs(Decimal(entry['amount'])),  # Initialize with the expense amount
                             'is_active': True,
                             'created_at': now(),
                             'updated_at': now(),
                         },
                     )
-                
-                
-                
+                else:
+                    # Update the current_amount of the bucket
+                    print("This is the current amount of the bucket before", bucket.current_amount)
+                    bucket.current_amount = (bucket.current_amount or Decimal('0')) + abs(Decimal(entry['amount']))
+                    print("This is the current amount of the bucket after", bucket.current_amount)
+                    bucket.updated_at = now()
+                    bucket.save()
+
                 plaid_account_id = entry.get('account_id')
                 account = Account.objects.filter(plaid_account_id=plaid_account_id, user=user).first()
                 if not account:
@@ -305,7 +314,7 @@ def add_expenses(processed_data, user):
                     name=entry['name'],
                     plaid_transaction_id=entry['transaction_id'],
                     description=entry['description'],
-                    amount=entry['amount'],
+                    amount=abs(entry['amount']),
                     date=entry['date'],
                     account=account,  # Use the passed account ID
                     created_at=now(),

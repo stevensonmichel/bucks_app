@@ -31,7 +31,7 @@ const Overview: React.FC = () => {
       }
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/budgets/6/", {
+        const response = await fetch("http://127.0.0.1:8000/api/budgets/11/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

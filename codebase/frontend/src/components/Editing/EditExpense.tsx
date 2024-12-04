@@ -1,18 +1,47 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-interface EditExpenseProps {}
+interface Bucket {
+  id: string;
+  name: string;
+}
 
-const EditExpense: React.FC<EditExpenseProps> = () => {
+const EditExpense: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { id } = useParams(); // Get expense ID from the URL
 
   const expense = location.state?.expense; // Access passed expense data
+  const [buckets, setBuckets] = useState<Bucket[]>([]);
   const [name, setName] = useState<string>(expense?.name || "");
   const [description, setDescription] = useState<string>(expense?.description || "");
   const [amount, setAmount] = useState<number | "">(expense?.amount || "");
   const [date, setDate] = useState<string>(expense?.date || "");
   const [bucket, setBucket] = useState<string>(expense?.bucket || "");
+
+  // Fetch buckets from API
+  useEffect(() => {
+    const fetchBuckets = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await fetch("http://127.0.0.1:8000/api/buckets/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setBuckets(data);
+        } else {
+          console.error("Failed to fetch buckets");
+        }
+      } catch (error) {
+        console.error("Error fetching buckets:", error);
+      }
+    };
+
+    fetchBuckets();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +63,7 @@ const EditExpense: React.FC<EditExpenseProps> = () => {
     try {
       const token = localStorage.getItem("access_token");
 
-      const response = await fetch(`http://127.0.0.1:8000/api/expenses/${expense.id}/`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/expenses/${id}/`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -125,14 +154,22 @@ const EditExpense: React.FC<EditExpenseProps> = () => {
           <label htmlFor="bucket" className="block text-gray-700 font-bold mb-2">
             Bucket
           </label>
-          <input
-            type="text"
+          <select
             id="bucket"
             value={bucket}
             onChange={(e) => setBucket(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
-          />
+          >
+            <option value="" disabled>
+              Select a bucket
+            </option>
+            {buckets.map((bucketOption) => (
+              <option key={bucketOption.id} value={bucketOption.id}>
+                {bucketOption.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex space-x-8">

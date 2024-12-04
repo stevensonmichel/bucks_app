@@ -100,6 +100,7 @@ const Accounts: React.FC = () => {
         );
         console.log('Successfully connected to the bank');
         navigate('/accounts');
+        window.location.reload();
       } catch (error) {
         console.error('Error exchanging public token:', error);
       }
@@ -170,9 +171,9 @@ const Accounts: React.FC = () => {
               <tr>
                 <th className="px-4 py-4 text-left">No</th>
                 <th className="px-4 py-4 text-left">Account Name</th>
-                <th className="px-4 py-4 text-left">Type</th>
-                <th className="px-4 py-4 text-left">Subtype</th>
-                <th className="px-4 py-4 text-left">Actions</th>
+                <th className="px-4 py-4 text-center">Type</th>
+                <th className="px-4 py-4 text-center">Subtype</th>
+                <th className="px-4 py-4 text-center">Actions</th>
 
               </tr>
             </thead>
@@ -187,8 +188,8 @@ const Accounts: React.FC = () => {
                 >
                   <td className="px-4 py-4 text-left">{i + 1}</td>
                   <td className="px-4 py-4 text-left">{account.name}</td>
-                  <td className="px-4 py-4 text-left">{account.type}</td>
-                  <td className="px-4 py-4 text-left">{account.subtype}</td>
+                  <td className="px-4 py-4 text-center">{account.type}</td>
+                  <td className="px-4 py-4 text-center">{account.subtype}</td>
                   <td className="px-4 py-4 text-left relative">
                     {selectedAccountId === account.id && (
                       <div

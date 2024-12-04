@@ -89,10 +89,10 @@ const Expenses: React.FC = () => {
             <tr>
               <th className="px-4 py-4 text-left w-12">No</th>
               <th className="px-4 py-4 text-left w-48">Name</th>
-              <th className="px-4 py-4 text-left w-32">Amount</th>
+              <th className="px-4 py-4 text-center w-32">Amount</th>
               <th className="px-4 py-4 text-left w-48">Bucket</th>
-              <th className="px-4 py-4 text-left w-32">Date</th>
-              <th className="px-4 py-4 text-left w-48">Actions</th>
+              <th className="px-4 py-4 text-center w-32">Date</th>
+              <th className="px-4 py-4 text-center w-48">Actions</th>
             </tr>
           </thead>
             <tbody>
@@ -106,11 +106,11 @@ const Expenses: React.FC = () => {
                 >
                   <td className="px-4 py-4 text-left">{i + 1}</td>
                   <td className="px-4 py-4 text-left">{expense.name || expense.description}</td>
-                  <td className="px-4 py-4 text-left">${expense.amount}</td>
+                  <td className="px-4 py-4 text-center">${expense.amount}</td>
                   <td className="px-4 py-4 text-left">{expense.bucket_name}</td>
-                  <td className="px-4 py-4 text-left">{expense.date}</td>
-                  <td className="px-4 py-4 text-left">
-                    <div className="flex space-x-2 h-8">
+                  <td className="px-4 py-4 text-center">{expense.date}</td>
+                  <td className="px-4 py-4 text-center">
+                    <div className="flex justify-end space-x-6 h-8">
                       {selectedExpenseId === expense.id ? (
                         <>
                           <button

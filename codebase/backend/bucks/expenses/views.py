@@ -8,6 +8,7 @@ from notifications.models import Notification
 from django.db.models import Sum
 from budgets.models import Budget
 from expenses.models import Expense
+from django.db import transaction
 
 
 class ExpenseListView(generics.ListCreateAPIView):
@@ -67,7 +68,7 @@ class ExpenseAddView(generics.CreateAPIView):
 class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
-    
+
     def get_object(self, pk):
         try:
             return Expense.objects.get(pk=pk)
@@ -85,10 +86,24 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
         expense = self.get_object(pk)
         if expense is None:
             return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = ExpenseSerializer(expense, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            with transaction.atomic():
+                # Calculate the difference in amount
+                old_amount = expense.amount
+                new_amount = serializer.validated_data.get('amount', old_amount)
+                amount_difference = new_amount - old_amount
+
+                # Update the bucket's current_amount
+                if expense.bucket:
+                    bucket = expense.bucket
+                    bucket.current_amount = (bucket.current_amount or 0) + amount_difference
+                    bucket.save()
+
+                # Save the updated expense
+                serializer.save()
+
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -96,11 +111,24 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
         expense = self.get_object(pk)
         if expense is None:
             return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = ExpenseSerializer(expense, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()
-                
+            with transaction.atomic():
+                # Calculate the difference in amount
+                old_amount = expense.amount
+                new_amount = serializer.validated_data.get('amount', old_amount)
+                amount_difference = new_amount - old_amount
+
+                # Update the bucket's current_amount
+                if expense.bucket:
+                    bucket = expense.bucket
+                    bucket.current_amount = (bucket.current_amount or 0) + amount_difference
+                    bucket.save()
+
+                # Save the updated expense
+                serializer.save()
+
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -108,8 +136,20 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
         expense = self.get_object(pk)
         if expense is None:
             return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
-        expense.delete()
+
+        with transaction.atomic():
+            # Adjust the bucket's current_amount if the expense is being deleted
+            if expense.bucket:
+                bucket = expense.bucket
+                bucket.current_amount = (bucket.current_amount or 0) - expense.amount
+                bucket.save()
+
+            # Delete the expense
+            expense.delete()
+
         return Response({"message": "Expense deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+
+
     
     
 class DailyExpensesView(APIView):
