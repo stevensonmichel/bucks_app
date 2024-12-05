@@ -1,4 +1,6 @@
 
+##### REQUIREMENTS
+
 
 ### Requirement 1: User Registration and Authentication
 - Number: R1
@@ -29,6 +31,7 @@
 - Requirement Revision History: 9/8/2024: Created based on core functionality of tracking expenses.
 
 
+
 ### Requirement 3: Expense Categories
 - Number: R3
 
@@ -43,38 +46,53 @@
 - Requirement Revision History: 9/8/2024: Added requirement for custom expense categorization.
 
 
-### Requirement 4: Display Expense History
+
+### Requirement 4: Monthly Budget Setting
 - Number: R4
-
-- Statement: The system shall display a list of past expenses with filters for date range, category, and amount.
-
-- Evaluation Method: Verify that users can view a list of past expenses and apply filters. Ensure filtered results match criteria.
-
-- Dependency: R2 (Track Expenses), R3 (Expense Categories)
-
-- Priority: High
-
-- Requirement Revision History: 9/4/2024: Created based on the need for users to analyze past expenses.
-
-
-
-### Requirement 5: Monthly Budget Setting
-- Number: R5
 
 - Statement: The system shall allow users to set a monthly budget and notify them when they are close to exceeding it.
 
 - Evaluation Method: Test if users can set a budget and receive notifications or alerts when their expenses approach or exceed the set limit.
 
-- Dependency: R2 (Track Expenses)
+- Dependency: R2 (Track Expenses), R3 (Expenses Categories)
 
-- Priority: Middle
+- Priority: High
 
 - Requirement Revision History: 9/4/2024: Created based on user feedback to track budget compliance.
 
 
 
-### Requirement 6: Secure Password Storage
+### Requirement 5: Plaid API Connection
+- Number: R5
+
+- Statement: The system shall allow users connect to any of their bank account. Plaid API will be used for the testing stage.
+
+- Evaluation Method: Test if users can connect their bank account, and have automation for populating expenses and buckets.
+
+- Dependency: R2 (Track Expenses), R3 (Expenses Categories)
+
+- Priority: High
+
+- Requirement Revision History: 9/4/2024: Created based on need for users to automate processes of recording expenses.
+
+
+### Requirement 6: Display Notifications
 - Number: R6
+
+- Statement: The system shall display a list of notifications related to additions of buckets, expenses, accounts, and budgets.
+
+- Evaluation Method: Verify that if any of these entities are created, namely buckets, expenses, accounts, or budgets, there is a notification created for each of them
+
+- Dependency: R2 (Track Expenses), R3 (Expense Categories), R4 (Monthly Budget)
+
+- Priority: Mid
+
+- Requirement Revision History: 9/4/2024: Created based on the need for users to analyze recent actions in the application.
+
+
+
+### Requirement 7: Secure Password Storage
+- Number: R7
 
 - Statement: The system shall securely store user passwords using encryption methods.
 
@@ -88,8 +106,8 @@
 
 
 
-### Requirement 7: User Profile Management
-- Number: R7
+### Requirement 8: User Profile Management
+- Number: R8
 
 - Statement: The system shall allow users to manage their profile information (e.g., email, name, password).
 
