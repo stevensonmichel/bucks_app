@@ -13,9 +13,11 @@ Description: The UI component is responsible for interacting with users. It prov
 
 Major Components:
 - Login Page: Handles user authentication.
-- Dashboard: Displays the user's financial overview and analytics.
+- Overview: Displays the user's financial overview and analytics while supporting budget actions.
+- Bucks Management Page: Allows users to add, delete, or modify categories.
 - Expense Management Page: Allows users to add, categorize, and review expenses.
-- Budget Management Page: Helps users set and track budgets.
+- Account Management Page: Allows users to add accounts through Plaid API and display connected bank accounts information.
+- Notification Management Allows users to analyze notifications, read and delete them.
 
 
 ### 2.2 Backend API
@@ -25,21 +27,24 @@ Description: The API serves as the middleware, processing requests from the fron
 
 Major Components:
 - Authentication Module: Manages user sessions and token-based authentication.
-- Expense Processing Module: Handles expense creation, modification, and categorization.
+- Expense Processing Module: Handles expense creation, modification, deletion, and categorization.
 - Budget Processing Module: Manages user budget data and triggers notifications when limits are exceeded.
+- Buckets Processing Module: Handles bucket creation, modification, and deletion.
 
 
 
 ### 2.3 Database
 Component Type: Database (PostgreSQL)
-Description: Stores user data, including login credentials, expenses, budget data, and analytics.
+Description: Stores user data, including login credentials, expenses, budget data, buckets data, notifications, and analytics.
 
 
 Tables:
 - Users Table: Stores user authentication data.
 - Expenses Table: Tracks expenses with fields for amount, category, description, and date.
 - Budgets Table: Stores user-defined budget limits and associated spending.
-- Categories Table: Contains predefined and user-generated categories for organizing expenses.
+- Buckets Table: Contains predefined and user-generated categories for organizing expenses.
+- Notifications Table: stores predefined data based on actions on other entities.
+- Account Table: stores predefined data coming from Plaid API.
 
 <br><br>
 
@@ -67,10 +72,14 @@ Tables:
 ## 4. Hierarchical Component Structure
 
 ### Frontend (React/TypeScript):
+- Landing Page
+- Signup Page
 - Login Page
-- Dashboard
+- Overview Page
 - Expense Management Page
-- Budget Management Page
+- Bucket Management Page
+- Account Management Page
+- Notifications Page
 
 
 ### Backend (Django/Python):
@@ -83,14 +92,16 @@ Tables:
 - Users Table
 - Expenses Table
 - Budgets Table
-- Categories Table
+- Buckets Table
+- Notifications Table
+- Accounts Table
 
 
 <br><br>
 
 ## 5. Interactions and Dependencies
 The UI interacts with the backend via REST API calls, exchanging data between components.
-The backend relies on PostgreSQL to store and retrieve user data, expenses, budgets, and categories.
+The backend relies on MySQL to store and retrieve user data, expenses, budgets, and categories.
 Dependencies exist between the Expense Processing Module and Analytics Module, as analytics rely on real-time expense data.
 
 
