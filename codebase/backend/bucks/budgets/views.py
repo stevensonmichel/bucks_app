@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Budget
 from .serializers import BudgetSerializer
 from notifications.models import Notification
-from datetime import timezone
+from django.utils import timezone
 
 class BudgetListCreateView(generics.ListCreateAPIView):
     queryset = Budget.objects.all()
@@ -19,7 +19,6 @@ class BudgetListCreateView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         active_budget = Budget.objects.filter(user=self.request.user, is_active=True).first()
-        print("we found that budget", active_budget)
         if active_budget:
             # Wrap the single object in a queryset-like structure
             return Budget.objects.filter(id=active_budget.id)

@@ -84,8 +84,6 @@ class ExchangePublicTokenView(APIView):
                         save_bank_information(account, user)
                         
                     transactions_response = get_transactions(request)
-                    print("We got transactions", transactions_response)
-                    
                 
                     add_buckets(transactions_response, user)
                     add_expenses(transactions_response, user)
@@ -180,7 +178,6 @@ def get_transactions(request):
 
         # Extract and process transactions
         transactions = response['transactions']
-        print("We got raw transactions", transactions)
         processed = extract_transaction_details(transactions=transactions)
 
         # Ensure processed is a list of dictionaries
@@ -291,9 +288,7 @@ def add_expenses(processed_data, user):
                     )
                 else:
                     # Update the current_amount of the bucket
-                    print("This is the current amount of the bucket before", bucket.current_amount)
                     bucket.current_amount = (bucket.current_amount or Decimal('0')) + abs(Decimal(entry['amount']))
-                    print("This is the current amount of the bucket after", bucket.current_amount)
                     bucket.updated_at = now()
                     bucket.save()
 
@@ -308,7 +303,6 @@ def add_expenses(processed_data, user):
                     continue
 
                 # Create the expense
-                print("Ladies and Gents, the bucket is", bucket)
                 Expense.objects.get_or_create(
                     user=user,
                     name=entry['name'],

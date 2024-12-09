@@ -8,7 +8,9 @@ from notifications.models import Notification
 from django.db.models import Sum
 from budgets.models import Budget
 from expenses.models import Expense
+from buckets.models import Bucket
 from django.db import transaction
+from decimal import Decimal
 
 
 class ExpenseListView(generics.ListCreateAPIView):
@@ -94,14 +96,32 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
                 old_amount = expense.amount
                 new_amount = serializer.validated_data.get('amount', old_amount)
                 amount_difference = new_amount - old_amount
+                print("The expense with the id is", expense.bucket.id)
+                print("The serializer from the amount is", serializer)
+                
+                old_bucket = expense.bucket.id
+                new_bucket = serializer.validated_data.get('bucket', old_bucket)
 
                 # Update the bucket's current_amount
+                print("new, old, and difference from put are", new_amount, old_amount, amount_difference)
                 if expense.bucket:
                     bucket = expense.bucket
-                    bucket.current_amount = (bucket.current_amount or 0) + amount_difference
-                    bucket.save()
-
-                # Save the updated expense
+                    if bucket.id != new_bucket.id:
+                        print("The old bucket current amount before is", bucket.current_amount)
+                        bucket.current_amount = (bucket.current_amount or 0) - Decimal(old_amount)
+                        print('the old bucket current amount after becomes', bucket.current_amount)
+                        
+                        updated_bucket = Bucket.objects.get(user=request.user, id=new_bucket.id)
+                        print("this is updated bucket", updated_bucket)
+                        print("The new bucket current amount before is", updated_bucket.current_amount)
+                        updated_bucket.current_amount = (updated_bucket.current_amount or 0) + Decimal(new_amount) 
+                        print("The new bucket current amount after  is", updated_bucket.current_amount)
+                        bucket.save()
+                        updated_bucket.save()
+                    else:
+                        bucket.current_amount = (bucket.current_amount or 0) + Decimal(amount_difference)
+                        bucket.save()
+                        
                 serializer.save()
 
             return Response(serializer.data)
@@ -116,14 +136,18 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
         if serializer.is_valid():
             with transaction.atomic():
                 # Calculate the difference in amount
-                old_amount = expense.amount
-                new_amount = serializer.validated_data.get('amount', old_amount)
+                old_amount = abs(Decimal(expense.amount))
+                new_amount = abs(Decimal(serializer.validated_data.get('amount', old_amount)))
                 amount_difference = new_amount - old_amount
+                
+                print("new, old, and difference are from patching", new_amount, old_amount, amount_difference)
 
                 # Update the bucket's current_amount
                 if expense.bucket:
                     bucket = expense.bucket
-                    bucket.current_amount = (bucket.current_amount or 0) + amount_difference
+                    print("Bucket current amount when patching before isssssssssssssssss", bucket.current_amount)
+                    bucket.current_amount = (bucket.current_amount or 0) + Decimal(amount_difference)
+                    print("Bucket current amount when patching after isssssssssssssssss", bucket.current_amount)
                     bucket.save()
 
                 # Save the updated expense
@@ -141,7 +165,9 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
             # Adjust the bucket's current_amount if the expense is being deleted
             if expense.bucket:
                 bucket = expense.bucket
+                print("Bucket current amount when deleting before isssssssssssssssss", bucket.current_amount)
                 bucket.current_amount = (bucket.current_amount or 0) - expense.amount
+                print("Bucket current amount when deleting after isssssssssssssssss", bucket.current_amount)
                 bucket.save()
 
             # Delete the expense

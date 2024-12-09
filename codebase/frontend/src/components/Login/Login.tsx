@@ -48,7 +48,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           alt="Location"
           className="w-96 h-96 sm:w-112 sm:h-112 md:w-128 md:h-128 mb-2"
         />
-        <p>Be With Your Financial Friend</p>
+        <p className="text-8xl text-white font-bold text-center text-gray-800 mt-6 p-8">
+          MEET YOUR FINANCIAL FRIEND
+        </p>
       </div>
 
 

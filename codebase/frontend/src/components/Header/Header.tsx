@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logoSrc from "../../assets/images/bucks_long.png"
 
 interface HeaderProps {
   title: string;
@@ -12,7 +13,11 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
       <div className="text-4xl font-bold text-blue-500">
         <h1 className="text-shadow-sm">
           <Link to="/overview" className="text-blue-500">
-            BUCK$
+            <img 
+                src={logoSrc} 
+                alt="Buck$ Logo" 
+                className="h-16 w-32 mr-2 flex-shrink-0"// Adjust height and width as needed
+            />
           </Link>
         </h1>
       </div>

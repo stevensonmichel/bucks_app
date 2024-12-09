@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 interface Notification {
   id: number;
   message: string;
-  type: 'expense' | 'bucket' | 'account' | 'other';
+  type: 'expense' | 'bucket' | 'account' | 'budget' | 'other';
   read: boolean; // Track read/unread status
   date: Date;
 }
@@ -103,10 +103,12 @@ const Notifications: React.FC = () => {
                   <span
                     className={`text-lg px-2 py-1 rounded-full ${
                       notification.type === 'expense'
-                        ? 'bg-blue-500 text-white'
-                        : notification.type === 'bucket'
-                        ? 'bg-green-500 text-white'
-                        : 'bg-purple-500 text-white'
+                      ? 'bg-blue-500 text-white'
+                      : notification.type === 'bucket'
+                      ? 'bg-green-500 text-white'
+                      : notification.type === 'budget'
+                      ? 'bg-yellow-500 text-white'
+                      : 'bg-purple-500 text-white'
                     }`}
                   >
                     {notification.type}

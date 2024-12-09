@@ -80,7 +80,7 @@ const Overview: React.FC = () => {
     datasets: [
       {
         label: 'Expenses ($)',
-        data: Array(dateLabels.length).fill(500), 
+        data: Array.from({ length: dateLabels.length }, () => Math.floor(Math.random() * 701)),
         fill: true,
         borderColor: '#36A2EB',
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
