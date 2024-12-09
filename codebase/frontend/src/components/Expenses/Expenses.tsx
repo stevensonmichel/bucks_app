@@ -107,7 +107,7 @@ const Expenses: React.FC = () => {
                   <td className="px-4 py-4 text-left">{i + 1}</td>
                   <td className="px-4 py-4 text-left">{expense.name || expense.description}</td>
                   <td className="px-4 py-4 text-center">${expense.amount}</td>
-                  <td className="px-4 py-4 text-left">{expense.bucket_name}</td>
+                  <td className="px-4 py-4 text-left">{expense.bucket_name ? expense.bucket_name : "None"}</td>
                   <td className="px-4 py-4 text-center">{expense.date}</td>
                   <td className="px-4 py-4 text-center">
                     <div className="flex justify-end space-x-6 h-8">

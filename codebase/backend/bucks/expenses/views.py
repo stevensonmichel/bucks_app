@@ -92,35 +92,27 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = ExpenseSerializer(expense, data=request.data)
         if serializer.is_valid():
             with transaction.atomic():
-                # Calculate the difference in amount
                 old_amount = expense.amount
                 new_amount = serializer.validated_data.get('amount', old_amount)
                 amount_difference = new_amount - old_amount
-                print("The expense with the id is", expense.bucket.id)
-                print("The serializer from the amount is", serializer)
-                
-                old_bucket = expense.bucket.id
+                old_bucket = expense.bucket.id if expense.bucket else None
                 new_bucket = serializer.validated_data.get('bucket', old_bucket)
 
-                # Update the bucket's current_amount
-                print("new, old, and difference from put are", new_amount, old_amount, amount_difference)
                 if expense.bucket:
                     bucket = expense.bucket
                     if bucket.id != new_bucket.id:
-                        print("The old bucket current amount before is", bucket.current_amount)
                         bucket.current_amount = (bucket.current_amount or 0) - Decimal(old_amount)
-                        print('the old bucket current amount after becomes', bucket.current_amount)
-                        
                         updated_bucket = Bucket.objects.get(user=request.user, id=new_bucket.id)
-                        print("this is updated bucket", updated_bucket)
-                        print("The new bucket current amount before is", updated_bucket.current_amount)
                         updated_bucket.current_amount = (updated_bucket.current_amount or 0) + Decimal(new_amount) 
-                        print("The new bucket current amount after  is", updated_bucket.current_amount)
                         bucket.save()
                         updated_bucket.save()
                     else:
                         bucket.current_amount = (bucket.current_amount or 0) + Decimal(amount_difference)
                         bucket.save()
+                else:
+                    updated_bucket = Bucket.objects.get(user=request.user, id=new_bucket.id)
+                    updated_bucket.current_amount = (updated_bucket.current_amount or 0) + Decimal(new_amount) 
+                    updated_bucket.save()
                         
                 serializer.save()
 
@@ -135,22 +127,15 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = ExpenseSerializer(expense, data=request.data, partial=True)
         if serializer.is_valid():
             with transaction.atomic():
-                # Calculate the difference in amount
                 old_amount = abs(Decimal(expense.amount))
                 new_amount = abs(Decimal(serializer.validated_data.get('amount', old_amount)))
                 amount_difference = new_amount - old_amount
-                
-                print("new, old, and difference are from patching", new_amount, old_amount, amount_difference)
 
-                # Update the bucket's current_amount
                 if expense.bucket:
                     bucket = expense.bucket
-                    print("Bucket current amount when patching before isssssssssssssssss", bucket.current_amount)
                     bucket.current_amount = (bucket.current_amount or 0) + Decimal(amount_difference)
-                    print("Bucket current amount when patching after isssssssssssssssss", bucket.current_amount)
                     bucket.save()
 
-                # Save the updated expense
                 serializer.save()
 
             return Response(serializer.data)
@@ -162,15 +147,11 @@ class ExpenseDetailView(generics.RetrieveUpdateDestroyAPIView):
             return Response({"error": "Expense not found."}, status=status.HTTP_404_NOT_FOUND)
 
         with transaction.atomic():
-            # Adjust the bucket's current_amount if the expense is being deleted
             if expense.bucket:
                 bucket = expense.bucket
-                print("Bucket current amount when deleting before isssssssssssssssss", bucket.current_amount)
-                bucket.current_amount = (bucket.current_amount or 0) - expense.amount
-                print("Bucket current amount when deleting after isssssssssssssssss", bucket.current_amount)
+                bucket.current_amount = (bucket.current_amount or 0) - Decimal(expense.amount)
                 bucket.save()
 
-            # Delete the expense
             expense.delete()
 
         return Response({"message": "Expense deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
@@ -182,7 +163,6 @@ class DailyExpensesView(APIView):
 
     def get(self, request, budget_id):
         try:
-            # Retrieve the budget for the user
             budget = Budget.objects.get(id=budget_id, user=request.user)
             start_date = budget.start_date
             end_date = budget.end_date
