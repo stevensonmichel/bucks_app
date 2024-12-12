@@ -1,7 +1,7 @@
 # *BUCK$*
 
 # Project Logo
-[Project Logo](project_logo.png)
+[Project Logo](bucks_no_background.png)
 
 
 ### Project Concept
